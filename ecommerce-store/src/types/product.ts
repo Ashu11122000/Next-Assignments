@@ -7,11 +7,11 @@
  * the E-commerce Store application.
  */
 
-import type { ID } from "./common";
 import type { Category } from "./category";
+import type { ID } from "./common";
 
 /* -------------------------------------------------------------------------- */
-/* Product Brand                                                               */
+/* Brand                                                                       */
 /* -------------------------------------------------------------------------- */
 
 export interface Brand {
@@ -21,7 +21,7 @@ export interface Brand {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Product Rating                                                              */
+/* Rating                                                                      */
 /* -------------------------------------------------------------------------- */
 
 export interface ProductRating {
@@ -30,7 +30,7 @@ export interface ProductRating {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Product Specifications                                                      */
+/* Specification                                                               */
 /* -------------------------------------------------------------------------- */
 
 export interface ProductSpecification {
@@ -72,43 +72,34 @@ export interface Product {
   isNew: boolean;
   onSale: boolean;
 }
+/* -------------------------------------------------------------------------- */
+/* Derived Helpers                                                             */
+/* -------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* Product Card                                                                */
-/* -------------------------------------------------------------------------- */
+export type ProductStatus =
+  | "new"
+  | "featured"
+  | "trending"
+  | "sale";
 
 export interface ProductCardProps {
   product: Product;
+  priority?: boolean;
+  className?: string;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Product Grid                                                                */
-/* -------------------------------------------------------------------------- */
 
 export interface ProductGridProps {
   products: Product[];
 }
-
-/* -------------------------------------------------------------------------- */
-/* Product Gallery                                                             */
-/* -------------------------------------------------------------------------- */
 
 export interface ProductGalleryProps {
   images: string[];
   productName: string;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Product Info                                                                */
-/* -------------------------------------------------------------------------- */
-
 export interface ProductInfoProps {
   product: Product;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Product Price                                                               */
-/* -------------------------------------------------------------------------- */
 
 export interface ProductPriceProps {
   price: number;
@@ -116,41 +107,21 @@ export interface ProductPriceProps {
   discountPercentage?: number;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Product Rating                                                              */
-/* -------------------------------------------------------------------------- */
-
 export interface ProductRatingProps {
   rating: ProductRating;
 }
-
-/* -------------------------------------------------------------------------- */
-/* Product Description                                                         */
-/* -------------------------------------------------------------------------- */
 
 export interface ProductDescriptionProps {
   description: string;
 }
 
-/* -------------------------------------------------------------------------- */
-/* Product Specifications                                                      */
-/* -------------------------------------------------------------------------- */
-
 export interface ProductSpecificationsProps {
   specifications: ProductSpecification[];
 }
 
-/* -------------------------------------------------------------------------- */
-/* Related Products                                                            */
-/* -------------------------------------------------------------------------- */
-
 export interface RelatedProductsProps {
   products: Product[];
 }
-
-/* -------------------------------------------------------------------------- */
-/* Product Page Params                                                         */
-/* -------------------------------------------------------------------------- */
 
 export interface ProductPageParams {
   id: string;

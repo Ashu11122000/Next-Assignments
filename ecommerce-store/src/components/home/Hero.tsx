@@ -243,7 +243,7 @@ export default function Hero() {
             >
               <div className="relative aspect-square">
                 <Image
-                  src="/images/banners/hero-product.webp"
+                  src="/images/banner/hero-product.webp"
                   alt="Featured Product"
                   fill
                   priority

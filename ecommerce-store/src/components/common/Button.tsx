@@ -109,10 +109,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    const Component = asChild ? Slot : "button";
+  const Comp = "button";
 
     return (
-      <Component
+      <Comp
         ref={ref}
         className={cn(
           buttonVariants({
@@ -158,7 +158,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             {rightIcon}
           </>
         )}
-      </Component>
+      </Comp>
     );
   },
 );

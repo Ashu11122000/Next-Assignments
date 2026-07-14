@@ -5,17 +5,22 @@ const nextConfig: NextConfig = {
 
   images: {
     remotePatterns: [
+      // Picsum Photos
       {
         protocol: "https",
-        hostname: "images.unsplash.com",
+        hostname: "picsum.photos",
       },
-      {
-        protocol: "https",
-        hostname: "source.unsplash.com",
-      },
+
+      // jsDelivr (Brand Logos)
       {
         protocol: "https",
         hostname: "cdn.jsdelivr.net",
+      },
+
+      // Unsplash (Keep for any remaining images during migration)
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
       },
     ],
   },
