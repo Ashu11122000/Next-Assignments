@@ -214,6 +214,12 @@ ecommerce-store/
 │
 ├── public/
 │   ├── images/
+│   │   ├── products/
+│   │   ├── categories/
+│   │   ├── banners/
+│   │   ├── brands/
+│   │   └── logo/
+│   │
 │   ├── icons/
 │   ├── favicon.ico
 │   ├── manifest.json
@@ -222,32 +228,117 @@ ecommerce-store/
 ├── src/
 │
 │   ├── app/
+│   │
 │   │   ├── (shop)/
+│   │   │
+│   │   │── layout.tsx
+│   │   │── page.tsx                 // Home
+│   │   │
+│   │   │── products/
+│   │   │   ├── page.tsx
+│   │   │   ├── loading.tsx
+│   │   │   ├── error.tsx
+│   │   │   │
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx
+│   │   │       ├── loading.tsx
+│   │   │       └── not-found.tsx
+│   │   │
+│   │   │── categories/
+│   │   │   ├── page.tsx
+│   │   │   └── [slug]/
+│   │   │       └── page.tsx
+│   │
 │   │   ├── api/
+│   │   │   └── products/
+│   │   │       └── route.ts
+│   │
+│   │   ├── favicon.ico
+│   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   ├── loading.tsx
 │   │   ├── error.tsx
 │   │   └── not-found.tsx
-│   │
-│   ├── components/
-│   │   ├── common/
-│   │   ├── layout/
-│   │   ├── home/
-│   │   ├── product/
-│   │   └── search/
-│   │
-│   ├── constants/
-│   ├── data/
-│   ├── hooks/
-│   ├── lib/
-│   ├── styles/
-│   └── types/
 │
-├── package.json
-├── next.config.ts
-├── tsconfig.json
+│   ├── components/
+│   │
+│   │   ├── common/
+│   │   │   ├── Badge.tsx
+│   │   │   ├── Button.tsx
+│   │   │   ├── Card.tsx
+│   │   │   ├── Container.tsx
+│   │   │   ├── EmptyState.tsx
+│   │   │   ├── Input.tsx
+│   │   │   ├── SearchInput.tsx
+│   │   │   ├── SectionHeading.tsx
+│   │   │   ├── Skeleton.tsx
+│   │   │   └── Spinner.tsx
+│   │
+│   │   ├── layout/
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Logo.tsx
+│   │   │   ├── MobileMenu.tsx
+│   │   │   └── Navbar.tsx
+│   │
+│   │   ├── home/
+│   │   │   ├── Hero.tsx
+│   │   │   ├── FeaturedProducts.tsx
+│   │   │   ├── Categories.tsx
+│   │   │   ├── TrendingProducts.tsx
+│   │   │   └── Newsletter.tsx
+│   │
+│   │   ├── product/
+│   │   │   ├── CategoryCard.tsx
+│   │   │   ├── ProductCard.tsx
+│   │   │   ├── ProductGrid.tsx
+│   │   │   ├── ProductGallery.tsx
+│   │   │   ├── ProductInfo.tsx
+│   │   │   ├── ProductDescription.tsx
+│   │   │   ├── ProductPrice.tsx
+│   │   │   ├── ProductRating.tsx
+│   │   │   ├── ProductSpecifications.tsx
+│   │   │   └── RelatedProducts.tsx
+│   │
+│   │   └── search/
+│   │       ├── SearchBar.tsx
+│   │       ├── SearchResults.tsx
+│   │       └── SearchFilters.tsx
+│
+│   ├── constants/
+│   │   ├── routes.ts
+│   │   ├── site.ts
+│   │   └── theme.ts
+│
+│   ├── data/
+│   │   ├── brands.ts
+│   │   ├── categories.ts
+│   │   ├── navigation.ts
+│   │   └── products.ts
+│
+│   ├── hooks/
+│   │   ├── useDebounce.ts
+│   │   ├── useLocalStorage.ts
+│   │   └── useSearch.ts
+│
+│   ├── lib/
+│   │   ├── constants.ts
+│   │   ├── metadata.ts
+│   │   └── utils.ts
+│
+│   ├── styles/
+│   │   └── animations.css
+│
+│   └── types/
+│       ├── category.ts
+│       ├── common.ts
+│       └── product.ts
+│
+├── .gitignore
 ├── eslint.config.mjs
+├── next.config.ts
+├── package.json
 ├── postcss.config.mjs
+├── tsconfig.json
 └── README.md
 ```
 
