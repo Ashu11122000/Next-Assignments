@@ -11,16 +11,14 @@ import "./globals.css";
  * Root Layout
  * ============================================================================
  *
- * Shared layout used across the entire application.
+ * Shared layout for the entire application.
  *
- * Features:
+ * Features
  * - Global SEO metadata
- * - Open Graph metadata
- * - Twitter Card metadata
- * - Google Geist fonts
+ * - Premium background
  * - Persistent navigation
- * - Shared footer
- * - Responsive page container
+ * - Responsive container
+ * - Light & Dark mode
  * ============================================================================
  */
 
@@ -35,29 +33,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://example.com"),
-
   title: {
     default: "Static Blog & Documentation Site",
     template: "%s | Static Blog & Documentation Site",
   },
 
   description:
-    "A simple static blog and documentation website built with Next.js App Router, TypeScript, Tailwind CSS, Markdown, and Static Site Generation (SSG).",
+    "A premium static blog and documentation platform built with Next.js App Router, TypeScript, Tailwind CSS, Markdown and Static Site Generation.",
 
   applicationName: "Static Blog & Documentation Site",
-
-  keywords: [
-    "Next.js",
-    "App Router",
-    "TypeScript",
-    "Tailwind CSS",
-    "Markdown",
-    "Static Site Generation",
-    "SSG",
-    "Documentation",
-    "Blog",
-  ],
 
   authors: [
     {
@@ -67,7 +51,18 @@ export const metadata: Metadata = {
 
   creator: "Ashish Sharma",
 
-  category: "Education",
+  category: "Technology",
+
+  keywords: [
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "Markdown",
+    "Documentation",
+    "Static Blog",
+    "App Router",
+    "SSG",
+  ],
 
   robots: {
     index: true,
@@ -77,22 +72,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Static Blog & Documentation Site",
     description:
-      "A simple assignment project demonstrating Static Site Generation (SSG), Markdown content, reusable components, and nested layouts using Next.js.",
-
+      "A premium static blog and documentation platform powered by Next.js App Router and Markdown.",
     type: "website",
-
     locale: "en_US",
-
     siteName: "Static Blog & Documentation Site",
   },
 
   twitter: {
     card: "summary_large_image",
-
     title: "Static Blog & Documentation Site",
-
     description:
-      "A Next.js App Router assignment demonstrating Static Site Generation (SSG), Markdown, and documentation pages.",
+      "A premium static blog and documentation platform built with Next.js and Markdown.",
   },
 };
 
@@ -104,20 +94,34 @@ export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-white font-sans text-gray-900 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100`}
       >
-        <div className="flex min-h-screen flex-col">
-          {/* Global Navigation */}
+        {/* Background Effects */}
+        <div className="fixed inset-0 -z-50 overflow-hidden">
+          <div className="absolute left-0 top-0 h-[32rem] w-[32rem] rounded-full bg-blue-500/8 blur-3xl" />
+
+          <div className="absolute right-0 top-48 h-[28rem] w-[28rem] rounded-full bg-violet-500/8 blur-3xl" />
+
+          <div className="absolute bottom-0 left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 rounded-full bg-cyan-500/8 blur-3xl" />
+
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.45),transparent_60%)] dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.03),transparent_60%)]" />
+        </div>
+
+        <div className="relative flex min-h-screen flex-col">
+          {/* Navigation */}
           <Navbar />
 
-          {/* Main Content */}
-          <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-10">
+          {/* Main */}
+          <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-12">
             {children}
           </main>
 
-          {/* Global Footer */}
+          {/* Footer */}
           <Footer />
         </div>
       </body>
