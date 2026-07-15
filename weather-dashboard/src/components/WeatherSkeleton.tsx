@@ -138,7 +138,7 @@ export default function WeatherSkeleton() {
             {Array.from({ length: 8 }).map((_, index) => (
               <div
                 key={index}
-                className="flex min-w-[120px] flex-col items-center rounded-xl border border-default p-4"
+                className="flex min-w-30 flex-col items-center rounded-xl border border-default p-4"
               >
                 <div className="h-4 w-12 rounded bg-muted" />
 

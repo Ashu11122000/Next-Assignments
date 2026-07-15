@@ -17,43 +17,20 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 
+import type { WeatherResponse } from "@/types/weather";
+
 /**
  * ============================================================================
  * Weather Details
  * ============================================================================
  *
- * Server Component
+ * Displays detailed weather metrics using the WeatherAPI response.
  *
- * Displays detailed weather metrics for the selected city.
- *
- * Built with:
- * - Next.js 16
- * - React 19
- * - TypeScript
- * - Tailwind CSS v4
- * - Lucide React
- *
- * Features
- * --------
- * ✓ Responsive grid
- * ✓ Accessible
- * ✓ Reusable
- * ✓ Premium layout
- * ✓ Fully typed
  * ============================================================================
  */
 
-export interface WeatherDetailsProps {
-  feelsLike: number;
-  humidity: number;
-  windSpeed: number;
-  windDirection: string;
-  pressure: number;
-  visibility: number;
-  uvIndex: number;
-  cloudCover: number;
-  sunrise: string;
-  sunset: string;
+interface WeatherDetailsProps {
+  weather: WeatherResponse;
 }
 
 interface DetailItemProps {
@@ -66,7 +43,7 @@ function DetailItem({
   icon,
   label,
   value,
-}: DetailItemProps) {
+}: Readonly<DetailItemProps>) {
   return (
     <div className="flex items-start gap-4 rounded-xl border border-default bg-muted/30 p-4 transition-colors hover:bg-muted/50">
       <div className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -87,17 +64,15 @@ function DetailItem({
 }
 
 export default function WeatherDetails({
-  feelsLike,
-  humidity,
-  windSpeed,
-  windDirection,
-  pressure,
-  visibility,
-  uvIndex,
-  cloudCover,
-  sunrise,
-  sunset,
-}: WeatherDetailsProps) {
+  weather,
+}: Readonly<WeatherDetailsProps>) {
+  const {
+    current,
+    forecast,
+  } = weather;
+
+  const today = forecast.forecastday[0];
+
   return (
     <Card>
       <CardHeader>
@@ -111,61 +86,61 @@ export default function WeatherDetails({
           <DetailItem
             icon={<Thermometer className="size-5" />}
             label="Feels Like"
-            value={`${Math.round(feelsLike)}°C`}
+            value={`${Math.round(current.feelslike_c)}°C`}
           />
 
           <DetailItem
             icon={<Droplets className="size-5" />}
             label="Humidity"
-            value={`${humidity}%`}
+            value={`${current.humidity}%`}
           />
 
           <DetailItem
             icon={<Wind className="size-5" />}
             label="Wind Speed"
-            value={`${windSpeed} km/h`}
+            value={`${current.wind_kph} km/h`}
           />
 
           <DetailItem
             icon={<Compass className="size-5" />}
             label="Wind Direction"
-            value={windDirection}
+            value={current.wind_dir}
           />
 
           <DetailItem
             icon={<Gauge className="size-5" />}
             label="Pressure"
-            value={`${pressure} hPa`}
+            value={`${current.pressure_mb} mb`}
           />
 
           <DetailItem
             icon={<Eye className="size-5" />}
             label="Visibility"
-            value={`${visibility} km`}
+            value={`${current.vis_km} km`}
           />
 
           <DetailItem
             icon={<Sunrise className="size-5" />}
             label="Sunrise"
-            value={sunrise}
+            value={today.astro.sunrise}
           />
 
           <DetailItem
             icon={<Sunset className="size-5" />}
             label="Sunset"
-            value={sunset}
+            value={today.astro.sunset}
           />
 
           <DetailItem
             icon={<Cloud className="size-5" />}
             label="Cloud Cover"
-            value={`${cloudCover}%`}
+            value={`${current.cloud}%`}
           />
 
           <DetailItem
             icon={<Gauge className="size-5" />}
             label="UV Index"
-            value={uvIndex.toFixed(1)}
+            value={current.uv.toFixed(1)}
           />
         </div>
       </CardContent>

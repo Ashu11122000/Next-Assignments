@@ -1,59 +1,52 @@
-import { WeatherResponse } from "@/types/weather";
+import type { WeatherResponse } from "@/types/weather";
 
 import { DEFAULT_CITY } from "./constants";
 
 /**
  * ============================================================================
- * Weather API Service
- * ============================================================================
- *
- * Handles communication with WeatherAPI.com.
- *
- * API:
- * https://api.weatherapi.com/v1/forecast.json
- *
- * Features:
- * - Current weather
- * - 5-day forecast
- * - Air Quality Index
- * - Weather alerts
+ * Weather Service
  * ============================================================================
  */
 
-const API_KEY = process.env.WEATHER_API_KEY;
-const BASE_URL = process.env.WEATHER_API_URL;
-
-async function fetchWeather<T>(
+async function fetchWeather(
   city: string
-): Promise<T> {
+): Promise<WeatherResponse> {
+  const API_KEY = process.env.WEATHER_API_KEY;
+  const BASE_URL = process.env.WEATHER_API_URL;
+
   if (!API_KEY) {
     throw new Error(
-      "WEATHER_API_KEY is missing from .env.local"
+      "Missing WEATHER_API_KEY in .env.local"
     );
   }
 
   if (!BASE_URL) {
     throw new Error(
-      "WEATHER_API_URL is missing from .env.local"
+      "Missing WEATHER_API_URL in .env.local"
     );
   }
 
-  const url =
-    `${BASE_URL}/forecast.json` +
-    `?key=${API_KEY}` +
-    `&q=${encodeURIComponent(city)}` +
-    `&days=5` +
-    `&aqi=yes` +
-    `&alerts=yes`;
+  const url = new URL(`${BASE_URL}/forecast.json`);
 
-  const response = await fetch(url, {
+  url.searchParams.set("key", API_KEY);
+  url.searchParams.set("q", city.trim());
+  url.searchParams.set("days", "5");
+  url.searchParams.set("aqi", "yes");
+  url.searchParams.set("alerts", "yes");
+
+  const response = await fetch(url.toString(), {
     next: {
       revalidate: 600,
     },
   });
 
   if (!response.ok) {
-    const message = await response.text();
+    let message = "Unable to fetch weather.";
+
+    try {
+      const error = await response.json();
+      message = error.error?.message ?? message;
+    } catch {}
 
     throw new Error(
       `Weather API Error (${response.status}): ${message}`
@@ -63,14 +56,8 @@ async function fetchWeather<T>(
   return response.json();
 }
 
-/**
- * ============================================================================
- * Get Weather
- * ============================================================================
- */
-
 export async function getWeather(
   city: string = DEFAULT_CITY
 ): Promise<WeatherResponse> {
-  return fetchWeather<WeatherResponse>(city);
+  return fetchWeather(city);
 }

@@ -1,89 +1,70 @@
 import Image from "next/image";
-import { MapPin, Clock } from "lucide-react";
+import { Clock, MapPin, Thermometer } from "lucide-react";
 import { format } from "date-fns";
 
+import { Badge } from "@/components/ui/Badge";
 import {
   Card,
   CardContent,
   CardHeader,
 } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
+
+import type { WeatherResponse } from "@/types/weather";
 
 /**
  * ============================================================================
  * Weather Card
  * ============================================================================
  *
- * Server Component
+ * Displays the current weather overview.
  *
- * Displays the current weather for a selected city.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
- * - Next/Image
- *
- * Features
- * --------
- * ✓ Responsive
- * ✓ Image Optimization
- * ✓ Accessible
- * ✓ Reusable
- * ✓ Premium layout
+ * Features:
+ * - Current temperature
+ * - Weather condition
+ * - Last updated time
+ * - City & country
+ * - Weather icon
+ * - Feels like temperature
+ * - Humidity
  * ============================================================================
  */
 
-export interface WeatherCardProps {
-  city: string;
-  country: string;
-
-  temperature: number;
-  feelsLike: number;
-
-  condition: string;
-  icon: string;
-
-  humidity: number;
-
-  lastUpdated: string;
+interface WeatherCardProps {
+  weather: WeatherResponse;
 }
 
 export default function WeatherCard({
-  city,
-  country,
-  temperature,
-  feelsLike,
-  condition,
-  icon,
-  humidity,
-  lastUpdated,
-}: WeatherCardProps) {
+  weather,
+}: Readonly<WeatherCardProps>) {
+  const {
+    location,
+    current,
+  } = weather;
+
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="pb-4">
+    <Card className="overflow-hidden border-default shadow-lg">
+      <CardHeader className="pb-6">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="flex items-center gap-2">
-              <MapPin className="size-4 text-muted" />
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <MapPin className="size-5 text-primary" />
 
               <h2 className="text-3xl font-bold tracking-tight">
-                {city}
+                {location.name}
               </h2>
 
               <Badge variant="secondary">
-                {country}
+                {location.country}
               </Badge>
             </div>
 
-            <div className="mt-3 flex items-center gap-2 text-sm text-muted">
+            <div className="flex items-center gap-2 text-sm text-muted">
               <Clock className="size-4" />
 
               <span>
                 Updated{" "}
                 {format(
-                  new Date(lastUpdated),
+                  new Date(current.last_updated),
                   "PPpp"
                 )}
               </span>
@@ -91,35 +72,40 @@ export default function WeatherCard({
           </div>
 
           <Image
-            src={`https:${icon}`}
-            alt={condition}
-            width={96}
-            height={96}
+            src={`https:${current.condition.icon}`}
+            alt={current.condition.text}
+            width={110}
+            height={110}
             priority
+            className="drop-shadow-xl"
           />
         </div>
       </CardHeader>
 
       <CardContent>
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-6xl font-bold tracking-tight">
-              {Math.round(temperature)}°
-            </p>
+            <div className="flex items-center gap-3">
+              <Thermometer className="size-8 text-primary" />
 
-            <p className="mt-2 text-lg capitalize">
-              {condition}
+              <h3 className="text-6xl font-bold tracking-tight">
+                {Math.round(current.temp_c)}°
+              </h3>
+            </div>
+
+            <p className="mt-3 text-xl font-medium capitalize">
+              {current.condition.text}
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6 text-sm">
             <div>
               <p className="text-muted">
                 Feels Like
               </p>
 
-              <p className="mt-1 font-semibold">
-                {Math.round(feelsLike)}°
+              <p className="mt-1 text-lg font-semibold">
+                {Math.round(current.feelslike_c)}°
               </p>
             </div>
 
@@ -128,8 +114,28 @@ export default function WeatherCard({
                 Humidity
               </p>
 
-              <p className="mt-1 font-semibold">
-                {humidity}%
+              <p className="mt-1 text-lg font-semibold">
+                {current.humidity}%
+              </p>
+            </div>
+
+            <div>
+              <p className="text-muted">
+                Wind Speed
+              </p>
+
+              <p className="mt-1 text-lg font-semibold">
+                {current.wind_kph} km/h
+              </p>
+            </div>
+
+            <div>
+              <p className="text-muted">
+                Visibility
+              </p>
+
+              <p className="mt-1 text-lg font-semibold">
+                {current.vis_km} km
               </p>
             </div>
           </div>

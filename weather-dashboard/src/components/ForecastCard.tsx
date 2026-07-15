@@ -1,5 +1,9 @@
 import Image from "next/image";
-import { CalendarDays, Droplets, Thermometer } from "lucide-react";
+import {
+  CalendarDays,
+  Droplets,
+  Thermometer,
+} from "lucide-react";
 import { format } from "date-fns";
 
 import {
@@ -8,99 +12,82 @@ import {
 } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
+import type { ForecastDay } from "@/types/weather";
+
 /**
  * ============================================================================
  * Forecast Card
  * ============================================================================
  *
- * Server Component
+ * Displays a single day's weather forecast using WeatherAPI data.
  *
- * Displays a single day's weather forecast.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
- * - Next/Image
- * - date-fns
- *
- * Features
- * --------
- * ✓ Responsive
- * ✓ Image Optimization
- * ✓ Accessible
- * ✓ Reusable
- * ✓ Premium UI
+ * Features:
+ * - Day of week
+ * - Weather icon
+ * - Condition
+ * - Max / Min temperature
+ * - Chance of rain
  * ============================================================================
  */
 
-export interface ForecastCardProps {
-  date: string;
-
-  icon: string;
-
-  condition: string;
-
-  maxTemperature: number;
-
-  minTemperature: number;
-
-  rainChance: number;
+interface ForecastCardProps {
+  forecast: ForecastDay;
 }
 
 export default function ForecastCard({
-  date,
-  icon,
-  condition,
-  maxTemperature,
-  minTemperature,
-  rainChance,
-}: ForecastCardProps) {
+  forecast,
+}: Readonly<ForecastCardProps>) {
+  const {
+    date,
+    day,
+  } = forecast;
+
   return (
     <Card className="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <CardContent className="flex flex-col items-center gap-4 p-6 text-center">
+      <CardContent className="flex flex-col items-center gap-5 p-6 text-center">
         <div className="flex items-center gap-2 text-sm text-muted">
           <CalendarDays className="size-4" />
 
           <span>
-            {format(new Date(date), "EEE")}
+            {format(new Date(date), "EEEE")}
           </span>
         </div>
 
         <Image
-          src={`https:${icon}`}
-          alt={condition}
+          src={`https:${day.condition.icon}`}
+          alt={day.condition.text}
           width={72}
           height={72}
         />
 
         <Badge variant="secondary">
-          {condition}
+          {day.condition.text}
         </Badge>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
+        <div className="flex items-center gap-5">
+          <div className="flex items-center gap-2">
             <Thermometer className="size-4 text-red-500" />
 
             <span className="font-semibold">
-              {Math.round(maxTemperature)}°
+              {Math.round(day.maxtemp_c)}°
             </span>
           </div>
 
-          <div className="text-muted">
+          <span className="text-muted">
             /
-          </div>
+          </span>
 
-          <div className="font-medium text-muted">
-            {Math.round(minTemperature)}°
-          </div>
+          <span className="font-medium text-muted">
+            {Math.round(day.mintemp_c)}°
+          </span>
         </div>
 
         <div className="flex items-center gap-2 text-sm text-muted">
           <Droplets className="size-4 text-blue-500" />
 
-          <span>{rainChance}% Rain</span>
+          <span>
+            {day.daily_chance_of_rain}% Rain
+          </span>
         </div>
       </CardContent>
     </Card>

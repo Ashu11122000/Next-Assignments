@@ -7,17 +7,15 @@ import { DEFAULT_CITY } from "@/lib/constants";
  * Weather API Route
  * ============================================================================
  *
- * Route:
+ * Endpoint:
  * GET /api/weather?city=London
  *
- * Uses:
- * WeatherAPI.com
+ * Fetches weather data from WeatherAPI.com including:
+ * - Current weather
+ * - 5-day forecast
+ * - Air quality
+ * - Weather alerts
  *
- * Returns:
- * - Current Weather
- * - 5-Day Forecast
- * - Air Quality
- * - Weather Alerts
  * ============================================================================
  */
 
@@ -38,21 +36,22 @@ export async function GET(request: NextRequest) {
   }
 
   const city =
-    request.nextUrl.searchParams.get("city") ??
-    DEFAULT_CITY;
+    request.nextUrl.searchParams
+      .get("city")
+      ?.trim() || DEFAULT_CITY;
 
   try {
-    const response = await fetch(
-      `${BASE_URL}/forecast.json` +
-        `?key=${API_KEY}` +
-        `&q=${encodeURIComponent(city)}` +
-        `&days=5` +
-        `&aqi=yes` +
-        `&alerts=yes`,
-      {
-        cache: "no-store",
-      }
-    );
+    const url = new URL(`${BASE_URL}/forecast.json`);
+
+    url.searchParams.set("key", API_KEY);
+    url.searchParams.set("q", city);
+    url.searchParams.set("days", "5");
+    url.searchParams.set("aqi", "yes");
+    url.searchParams.set("alerts", "yes");
+
+    const response = await fetch(url.toString(), {
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       const error = await response.json();
@@ -61,7 +60,7 @@ export async function GET(request: NextRequest) {
         {
           success: false,
           message:
-            error.error?.message ??
+            error?.error?.message ??
             "Unable to fetch weather data.",
         },
         {
@@ -82,7 +81,7 @@ export async function GET(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("Weather API Error:", error);
+    console.error("Weather API Route Error:", error);
 
     return NextResponse.json(
       {
