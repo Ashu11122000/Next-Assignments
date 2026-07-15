@@ -517,8 +517,8 @@ Current Phase: **Phase 1 — Project Setup**
 Overall Progress:
 
 * Phase 1: Completed
-* Phase 2: Pending
-* Phase 3: Pending
+* Phase 2: completed
+* Phase 3: completed
 * Phase 4: Pending
 * Phase 5: Pending
 * Phase 6: Pending
