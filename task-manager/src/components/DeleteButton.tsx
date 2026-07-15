@@ -10,14 +10,14 @@
  * Features:
  * - Confirmation dialog
  * - Loading state
+ * - Error handling
  * - Server Actions
  * - Accessible
- * - Lucide icon
  * - React 19 compatible
  * ============================================================================
  */
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Loader2, Trash2 } from "lucide-react";
 
 import { deleteTask } from "@/app/actions/task.actions";
@@ -40,8 +40,11 @@ export function DeleteButton({
   confirmMessage = "Are you sure you want to delete this task?",
 }: DeleteButtonProps) {
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = () => {
+    setError(null);
+
     const confirmed = window.confirm(confirmMessage);
 
     if (!confirmed) {
@@ -49,25 +52,42 @@ export function DeleteButton({
     }
 
     startTransition(async () => {
-      await deleteTask(taskId);
+      try {
+        await deleteTask(taskId);
+      } catch (err) {
+        console.error(err);
+
+        setError("Failed to delete the task. Please try again.");
+      }
     });
   };
 
   return (
-    <Button
-      type="button"
-      variant="destructive"
-      size="icon"
-      loading={isPending}
-      disabled={isPending}
-      onClick={handleDelete}
-      aria-label="Delete task"
-    >
-      {isPending ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Trash2 className="h-4 w-4" />
+    <div className="flex flex-col items-end gap-2">
+      <Button
+        type="button"
+        variant="destructive"
+        size="icon"
+        loading={isPending}
+        disabled={isPending}
+        onClick={handleDelete}
+        aria-label="Delete task"
+      >
+        {isPending ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <Trash2 className="h-4 w-4" />
+        )}
+      </Button>
+
+      {error && (
+        <p
+          role="alert"
+          className="max-w-48 text-right text-xs text-red-600 dark:text-red-400"
+        >
+          {error}
+        </p>
       )}
-    </Button>
+    </div>
   );
 }

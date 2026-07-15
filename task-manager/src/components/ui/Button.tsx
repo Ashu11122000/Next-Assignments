@@ -21,7 +21,7 @@
  */
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { Loader2 } from "lucide-react";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -135,24 +135,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Component = asChild ? Slot : "button";
 
     return (
-      <Component
-        ref={ref}
-        className={cn(buttonVariants({ variant, size }), className)}
-        disabled={loading || disabled}
-        aria-disabled={loading || disabled}
-        {...props}
-      >
-        {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          leftIcon
-        )}
+  <Component
+    ref={ref}
+    className={cn(buttonVariants({ variant, size }), className)}
+    disabled={loading || disabled}
+    aria-disabled={loading || disabled}
+    {...props}
+  >
+    {loading ? (
+      <Loader2 className="h-4 w-4 animate-spin" />
+    ) : (
+      leftIcon
+    )}
 
-        {children}
+    <Slottable>{children}</Slottable>
 
-        {!loading && rightIcon}
-      </Component>
-    );
+    {!loading && rightIcon}
+  </Component>
+);
   }
 );
 
