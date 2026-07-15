@@ -517,12 +517,12 @@ Current Phase: **Phase 1 — Project Setup**
 Overall Progress:
 
 * Phase 1: Completed
-* Phase 2: completed
-* Phase 3: completed
-* Phase 4: Pending
-* Phase 5: Pending
-* Phase 6: Pending
-* Phase 7: Pending
+* Phase 2: Completed
+* Phase 3: Completed
+* Phase 4: Completed
+* Phase 5: Completed
+* Phase 6: Completed
+* Phase 7: Completed
 * Phase 8: Pending
 * Phase 9: Pending
 * Phase 10: Pending

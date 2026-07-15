@@ -4,23 +4,6 @@
  * ============================================================================
  * Task Server Actions
  * ============================================================================
- *
- * Server Actions responsible for all CRUD operations on tasks.
- *
- * Features:
- * - Create tasks
- * - Read tasks
- * - Update tasks
- * - Delete tasks
- * - Zod validation
- * - Prisma ORM
- * - Cache revalidation
- *
- * Compatible with:
- * - Next.js 16
- * - Prisma 7
- * - Server Actions
- * ============================================================================
  */
 
 import { revalidatePath } from "next/cache";
@@ -33,29 +16,29 @@ import {
 } from "@/validations/task";
 
 /* -------------------------------------------------------------------------- */
+/* Action State                                                               */
+/* -------------------------------------------------------------------------- */
+
+export interface FormState {
+  success: boolean;
+  message?: string;
+  errors?: Record<string, string[]>;
+}
+
+/* -------------------------------------------------------------------------- */
 /* Create Task                                                                */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Creates a new task.
- *
- * @param formData - Incoming form data from the client.
- */
-export async function createTask(formData: FormData): Promise<void> {
-  /* ------------------------------------------------------------------------ */
-  /* Extract Form Values                                                      */
-  /* ------------------------------------------------------------------------ */
-
+export async function createTask(
+  _previousState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const rawData = {
     title: formData.get("title"),
     description: formData.get("description"),
   };
 
-  /* ------------------------------------------------------------------------ */
-  /* Validate Input                                                           */
-  /* ------------------------------------------------------------------------ */
-
-  const validatedData = createTaskSchema.parse({
+  const validatedData = createTaskSchema.safeParse({
     title: rawData.title,
     description:
       typeof rawData.description === "string" &&
@@ -64,74 +47,32 @@ export async function createTask(formData: FormData): Promise<void> {
         : undefined,
   });
 
-  /* ------------------------------------------------------------------------ */
-  /* Create Task                                                              */
-  /* ------------------------------------------------------------------------ */
-
-  await prisma.task.create({
-    data: {
-      title: validatedData.title,
-      description: validatedData.description,
-    },
-  });
-
-  /* ------------------------------------------------------------------------ */
-  /* Refresh Cached Pages                                                     */
-  /* ------------------------------------------------------------------------ */
-
-  revalidatePath("/");
-}
-
-/* -------------------------------------------------------------------------- */
-/* Get All Tasks                                                              */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Retrieves all tasks ordered by newest first.
- *
- * @returns An array of tasks.
- */
-export async function getTasks() {
-  try {
-    const tasks = await prisma.task.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    return tasks;
-  } catch (error) {
-    console.error("Failed to fetch tasks:", error);
-    throw new Error("Unable to retrieve tasks.");
-  }
-}
-
-/* -------------------------------------------------------------------------- */
-/* Get Single Task                                                            */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Retrieves a single task by its ID.
- *
- * @param id - Task ID.
- * @returns The matching task or null if not found.
- */
-export async function getTask(id: number) {
-  if (!Number.isInteger(id) || id <= 0) {
-    throw new Error("Invalid task ID.");
+  if (!validatedData.success) {
+    return {
+      success: false,
+      message: "Please correct the highlighted fields.",
+      errors: validatedData.error.flatten().fieldErrors,
+    };
   }
 
   try {
-    const task = await prisma.task.findUnique({
-      where: {
-        id,
-      },
+    await prisma.task.create({
+      data: validatedData.data,
     });
 
-    return task;
+    revalidatePath("/");
+
+    return {
+      success: true,
+      message: "Task created successfully.",
+    };
   } catch (error) {
-    console.error(`Failed to fetch task with ID ${id}:`, error);
-    throw new Error("Unable to retrieve task.");
+    console.error(error);
+
+    return {
+      success: false,
+      message: "Failed to create task.",
+    };
   }
 }
 
@@ -139,12 +80,10 @@ export async function getTask(id: number) {
 /* Update Task                                                                */
 /* -------------------------------------------------------------------------- */
 
-/**
- * Updates an existing task.
- *
- * @param formData - Incoming form data from the client.
- */
-export async function updateTask(formData: FormData): Promise<void> {
+export async function updateTask(
+  _previousState: FormState,
+  formData: FormData
+): Promise<FormState> {
   /* ------------------------------------------------------------------------ */
   /* Extract Form Values                                                      */
   /* ------------------------------------------------------------------------ */
@@ -160,7 +99,7 @@ export async function updateTask(formData: FormData): Promise<void> {
   /* Validate Input                                                           */
   /* ------------------------------------------------------------------------ */
 
-  const validatedData = updateTaskSchema.parse({
+  const validatedData = updateTaskSchema.safeParse({
     id: rawData.id,
     title: rawData.title,
     description:
@@ -171,26 +110,46 @@ export async function updateTask(formData: FormData): Promise<void> {
     completed: rawData.completed,
   });
 
+  if (!validatedData.success) {
+    return {
+      success: false,
+      message: "Please correct the highlighted fields.",
+      errors: validatedData.error.flatten().fieldErrors,
+    };
+  }
+
   /* ------------------------------------------------------------------------ */
   /* Update Task                                                              */
   /* ------------------------------------------------------------------------ */
 
-  await prisma.task.update({
-    where: {
-      id: validatedData.id,
-    },
-    data: {
-      title: validatedData.title,
-      description: validatedData.description,
-      completed: validatedData.completed,
-    },
-  });
+  try {
+    await prisma.task.update({
+      where: {
+        id: validatedData.data.id,
+      },
+      data: {
+        title: validatedData.data.title,
+        description: validatedData.data.description,
+        completed: validatedData.data.completed,
+      },
+    });
 
-  /* ------------------------------------------------------------------------ */
-  /* Refresh Cached Pages                                                     */
-  /* ------------------------------------------------------------------------ */
+    revalidatePath("/");
 
-  revalidatePath("/");
+    revalidatePath(`/edit/${validatedData.data.id}`);
+
+    return {
+      success: true,
+      message: "Task updated successfully.",
+    };
+  } catch (error) {
+    console.error("Failed to update task:", error);
+
+    return {
+      success: false,
+      message: "Failed to update task.",
+    };
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -207,23 +166,71 @@ export async function deleteTask(id: number): Promise<void> {
   /* Validate Input                                                           */
   /* ------------------------------------------------------------------------ */
 
-  const validatedData = deleteTaskSchema.parse({
+  const validatedData = deleteTaskSchema.safeParse({
     id,
   });
+
+  if (!validatedData.success) {
+    throw new Error("Invalid task ID.");
+  }
 
   /* ------------------------------------------------------------------------ */
   /* Delete Task                                                              */
   /* ------------------------------------------------------------------------ */
 
-  await prisma.task.delete({
-    where: {
-      id: validatedData.id,
-    },
-  });
+  try {
+    await prisma.task.delete({
+      where: {
+        id: validatedData.data.id,
+      },
+    });
 
-  /* ------------------------------------------------------------------------ */
-  /* Refresh Cached Pages                                                     */
-  /* ------------------------------------------------------------------------ */
+    /* ---------------------------------------------------------------------- */
+    /* Refresh Cached Pages                                                   */
+    /* ---------------------------------------------------------------------- */
 
-  revalidatePath("/");
+    revalidatePath("/");
+  } catch (error) {
+    console.error("Failed to delete task:", error);
+
+    throw new Error("Unable to delete task.");
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Get All Tasks                                                              */
+/* -------------------------------------------------------------------------- */
+
+export async function getTasks() {
+  try {
+    return await prisma.task.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("Failed to fetch tasks:", error);
+    throw new Error("Unable to retrieve tasks.");
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Get Single Task                                                            */
+/* -------------------------------------------------------------------------- */
+
+export async function getTask(id: number) {
+  if (!Number.isInteger(id) || id <= 0) {
+    throw new Error("Invalid task ID.");
+  }
+
+  try {
+    return await prisma.task.findUnique({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    console.error(`Failed to fetch task with ID ${id}:`, error);
+    throw new Error("Unable to retrieve task.");
+  }
 }
