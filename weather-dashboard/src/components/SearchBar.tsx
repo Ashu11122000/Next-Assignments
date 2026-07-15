@@ -2,7 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, MapPin, Search } from "lucide-react";
+import {
+  Loader2,
+  MapPin,
+  Search,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -12,15 +16,15 @@ import { Input } from "@/components/ui/Input";
  * Search Bar
  * ============================================================================
  *
- * Client Component
+ * Premium weather search component.
  *
- * Features:
- * - Search any city
- * - Enter key support
- * - Search button
- * - Loading state
- * - Responsive
- * - Accessible
+ * Features
+ * --------
+ * ✓ Search any city
+ * ✓ Enter key support
+ * ✓ Loading state
+ * ✓ Glassmorphism
+ * ✓ Responsive
  * ============================================================================
  */
 
@@ -50,36 +54,41 @@ export default function SearchBar() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full flex-col gap-3 sm:flex-row"
+      className="flex w-full flex-col gap-4 sm:flex-row sm:items-center"
     >
-      <div className="relative flex-1">
-        <MapPin className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+      {/* Search Input */}
+      <div className="group relative flex-1">
+
+        <MapPin className="pointer-events-none absolute left-5 top-1/2 z-10 size-5 -translate-y-1/2 text-sky-500 transition-colors duration-300 group-focus-within:text-primary" />
 
         <Input
           value={city}
           onChange={(event) =>
             setCity(event.target.value)
           }
-          placeholder="Search city..."
-          className="h-12 rounded-xl pl-12"
+          placeholder="Search for any city..."
+          className="h-14 rounded-2xl pl-14 pr-5 text-base shadow-md transition-all duration-300"
           autoComplete="off"
           spellCheck={false}
         />
+
       </div>
 
+      {/* Search Button */}
       <Button
         type="submit"
+        size="lg"
         disabled={isPending}
-        className="h-12 rounded-xl px-6"
+        className="h-14 min-w-[170px] rounded-2xl px-8 shadow-lg"
       >
         {isPending ? (
           <>
-            <Loader2 className="mr-2 size-4 animate-spin" />
+            <Loader2 className="size-5 animate-spin" />
             Searching...
           </>
         ) : (
           <>
-            <Search className="mr-2 size-4" />
+            <Search className="size-5" />
             Search
           </>
         )}

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-
 import { ThemeProvider } from "next-themes";
 
 import {
@@ -15,16 +14,18 @@ import "./globals.css";
  * Root Layout
  * ============================================================================
  *
- * Shared layout for the Weather Dashboard.
+ * Shared application layout.
  *
- * Features:
- * - Global metadata
- * - SEO
- * - Open Graph
- * - Twitter Cards
- * - Theme Provider
- * - Google Geist fonts
- * - Global styles
+ * Features
+ * --------
+ * ✓ Global metadata
+ * ✓ SEO
+ * ✓ Open Graph
+ * ✓ Twitter Cards
+ * ✓ Theme Provider
+ * ✓ Google Geist Fonts
+ * ✓ Premium background
+ * ✓ Optimized rendering
  * ============================================================================
  */
 
@@ -125,9 +126,32 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      className="scroll-smooth"
     >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={[
+          geistSans.variable,
+          geistMono.variable,
+
+          // Layout
+          "min-h-screen",
+
+          // Typography
+          "font-sans",
+          "antialiased",
+          "text-foreground",
+
+          // Background
+          "bg-background",
+          "selection:bg-sky-500/20",
+          "selection:text-foreground",
+
+          // Rendering
+          "overflow-x-hidden",
+          "[text-rendering:optimizeLegibility]",
+          "[-webkit-font-smoothing:antialiased]",
+          "[-moz-osx-font-smoothing:grayscale]",
+        ].join(" ")}
       >
         <ThemeProvider
           attribute="class"

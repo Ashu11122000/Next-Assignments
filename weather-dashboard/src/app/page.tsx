@@ -13,7 +13,7 @@ import ForecastCard from "@/components/ForecastCard";
  * Home Dashboard
  * ============================================================================
  *
- * Main application dashboard.
+ * Premium weather dashboard.
  *
  * ============================================================================
  */
@@ -23,83 +23,122 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-background">
+
       <Navbar />
 
-      <div className="container mx-auto max-w-7xl space-y-8 px-4 py-8">
-        {/* Hero */}
+      <div className="relative">
 
-        <section className="space-y-8">
-          <div className="space-y-4 text-center">
-            <span className="inline-flex rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
-              Live Weather Dashboard
-            </span>
+        {/* Background Glow */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px] bg-gradient-to-b from-sky-500/10 via-cyan-500/5 to-transparent" />
 
-            <h1 className="text-5xl font-bold tracking-tight md:text-6xl">
-              {weather.location.name}
-            </h1>
+        <div className="container mx-auto max-w-[1600px] px-5 py-12 lg:px-8 2xl:px-10">
 
-            <p className="text-lg text-muted-foreground">
-              {weather.location.region},{" "}
-              {weather.location.country}
-            </p>
+          {/* ============================================================ */}
+          {/* Hero */}
+          {/* ============================================================ */}
 
-            <p className="text-sm text-muted-foreground">
-              Local Time • {weather.location.localtime}
-            </p>
-          </div>
+          <section className="mb-20">
 
-          <div className="mx-auto max-w-3xl">
-            <SearchBar />
-          </div>
-        </section>
+            <div className="mx-auto max-w-5xl text-center">
 
-        {/* Overview */}
+              <span className="inline-flex items-center rounded-full border border-sky-500/20 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-600 dark:text-sky-400 backdrop-blur-xl">
+                🌤️ Live Weather Dashboard
+              </span>
 
-        <section className="grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
-          <WeatherCard weather={weather} />
+              <h1 className="mt-8 text-6xl font-black tracking-tight leading-none md:text-8xl">
+                {weather.location.name}
+              </h1>
 
-          <WeatherDetails weather={weather} />
-        </section>
+              <p className="mt-4 text-xl text-muted-foreground">
+                {weather.location.region},{" "}
+                {weather.location.country}
+              </p>
 
-        {/* Hourly */}
+              <p className="mt-2 text-sm text-muted-foreground">
+                Local Time • {weather.location.localtime}
+              </p>
 
-        <section className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-bold">
-              Hourly Forecast
-            </h2>
+              <div className="mx-auto mt-14 max-w-4xl">
+                <SearchBar />
+              </div>
 
-            <p className="text-muted-foreground">
-              Weather conditions throughout today.
-            </p>
-          </div>
+            </div>
 
-          <HourlyForecast weather={weather} />
-        </section>
+          </section>
 
-        {/* Forecast */}
+          {/* ============================================================ */}
+          {/* Overview */}
+          {/* ============================================================ */}
 
-        <section className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-bold">
-              5-Day Forecast
-            </h2>
+          <section className="mb-12 grid gap-8 xl:grid-cols-12">
 
-            <p className="text-muted-foreground">
-              Weather outlook for the upcoming days.
-            </p>
-          </div>
+            <div className="xl:col-span-8">
+  <WeatherCard weather={weather} />
+</div>
 
-          <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
-            {weather.forecast.forecastday.map((day) => (
-              <ForecastCard
-                key={day.date_epoch}
-                forecast={day}
-              />
-            ))}
-          </div>
-        </section>
+<div className="xl:col-span-4">
+  <WeatherDetails weather={weather} />
+</div>
+
+          </section>
+
+          {/* ============================================================ */}
+          {/* Hourly Forecast */}
+          {/* ============================================================ */}
+
+          <section className="mb-20 space-y-6">
+
+            <div className="space-y-3">
+
+              <h2 className="text-4xl font-bold tracking-tight">
+                Hourly Forecast
+              </h2>
+
+              <p className="text-lg text-muted-foreground">
+                Weather conditions throughout today.
+              </p>
+
+            </div>
+
+            <HourlyForecast weather={weather} />
+
+          </section>
+
+          {/* ============================================================ */}
+          {/* 5-Day Forecast */}
+          {/* ============================================================ */}
+
+          <section className="space-y-6">
+
+            <div className="space-y-2">
+
+              <h2 className="text-3xl font-bold tracking-tight">
+                5-Day Forecast
+              </h2>
+
+              <p className="text-muted-foreground">
+                Weather outlook for the upcoming days.
+              </p>
+
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4 ">
+
+              {weather.forecast.forecastday.map((day) => (
+                <ForecastCard
+                  key={day.date_epoch}
+                  forecast={day}
+                />
+              ))}
+
+            </div>
+
+          </section>
+
+        </div>
+
       </div>
+
     </main>
   );
 }

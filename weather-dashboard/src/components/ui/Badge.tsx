@@ -8,65 +8,66 @@ import { cn } from "@/lib/utils";
  * Badge Component
  * ============================================================================
  *
- * A reusable badge component for labels, status indicators,
- * weather conditions, categories, and metadata.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
- * - class-variance-authority
+ * Premium reusable badge component for labels, weather conditions,
+ * metadata, categories and status indicators.
  *
  * Features
  * --------
+ * ✓ Glassmorphism inspired styling
  * ✓ Multiple variants
  * ✓ Multiple sizes
  * ✓ Accessible
- * ✓ Tailwind Merge support
+ * ✓ Fully responsive
  * ✓ Type-safe variants
  * ============================================================================
  */
 
 const badgeVariants = cva(
   [
-    "inline-flex items-center justify-center",
+    "inline-flex items-center justify-center gap-1.5",
     "rounded-full",
     "border",
-    "font-medium",
+    "font-semibold",
+    "tracking-wide",
     "whitespace-nowrap",
-    "transition-colors",
     "select-none",
     "shrink-0",
+    "backdrop-blur-md",
+    "transition-all duration-300 ease-out",
+    "shadow-sm",
+    "hover:shadow-md",
+    "focus-visible:outline-none",
+    "focus-visible:ring-2",
+    "focus-visible:ring-primary/40",
   ],
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground",
+          "border-primary/15 bg-primary/10 text-primary hover:bg-primary/15",
 
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground",
+          "border-border/60 bg-secondary/70 text-secondary-foreground hover:bg-secondary",
 
         outline:
-          "border-default bg-transparent text-foreground",
+          "border-border bg-background/60 text-foreground hover:bg-muted/60",
 
         success:
-          "border-transparent bg-green-600 text-white",
+          "border-green-500/20 bg-green-500/10 text-green-700 dark:text-green-400 hover:bg-green-500/15",
 
         warning:
-          "border-transparent bg-amber-500 text-black",
+          "border-amber-500/20 bg-amber-500/10 text-amber-700 dark:text-amber-400 hover:bg-amber-500/15",
 
         destructive:
-          "border-transparent bg-red-600 text-white",
+          "border-red-500/20 bg-red-500/10 text-red-700 dark:text-red-400 hover:bg-red-500/15",
       },
 
       size: {
-        sm: "px-2 py-0.5 text-xs",
+        sm: "h-6 px-2.5 text-[11px]",
 
-        default: "px-2.5 py-1 text-xs",
+        default: "h-7 px-3 text-xs",
 
-        lg: "px-3 py-1.5 text-sm",
+        lg: "h-8 px-4 text-sm",
       },
     },
 
@@ -82,15 +83,7 @@ export interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, variant, size, ...props }, ref) => {
     return (
       <span
         ref={ref}

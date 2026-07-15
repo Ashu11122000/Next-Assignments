@@ -16,13 +16,9 @@ import type { WeatherResponse } from "@/types/weather";
  * Weather Page
  * ============================================================================
  *
- * Server Component
+ * Premium Weather Dashboard
  *
- * Responsibilities:
- * - Fetch weather data from WeatherAPI.com
- * - Generate dynamic metadata
- * - Handle invalid cities
- * - Compose reusable UI components
+ * Server Component
  *
  * ============================================================================
  */
@@ -64,89 +60,124 @@ export default async function WeatherPage({
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Navigation */}
+
       <Navbar />
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8">
-          {/* Hero Section */}
-          <section className="space-y-6">
-            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div className="space-y-3">
-                <span className="inline-flex w-fit rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
-                  Live Weather
+      <div className="relative">
+
+        {/* Background Glow */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-sky-500/10 via-cyan-500/5 to-transparent" />
+
+        <div className="container mx-auto max-w-7xl px-4 py-10 lg:px-6">
+
+          {/* ============================================================ */}
+          {/* Hero */}
+          {/* ============================================================ */}
+
+          <section className="mb-14">
+
+            <div className="flex flex-col gap-10 xl:flex-row xl:items-end xl:justify-between">
+
+              {/* Left */}
+              <div>
+
+                <span className="inline-flex items-center rounded-full border border-sky-500/20 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-600 dark:text-sky-400 backdrop-blur-xl">
+                  🌤️ Live Weather
                 </span>
 
-                <div className="space-y-2">
-                  <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
-                    {weather.location.name}
-                  </h1>
+                <h1 className="mt-6 text-5xl font-black tracking-tight md:text-6xl">
+                  {weather.location.name}
+                </h1>
 
-                  <p className="text-lg text-muted">
-                    {weather.location.region},{" "}
-                    {weather.location.country}
-                  </p>
+                <p className="mt-4 text-xl text-muted-foreground">
+                  {weather.location.region},{" "}
+                  {weather.location.country}
+                </p>
 
-                  <p className="text-sm text-muted">
-                    Local Time • {weather.location.localtime}
-                  </p>
-                </div>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Local Time • {weather.location.localtime}
+                </p>
+
               </div>
 
+              {/* Search */}
               <div className="w-full max-w-xl">
                 <SearchBar />
               </div>
+
             </div>
+
           </section>
 
-          {/* Current Weather */}
-          <section>
+          {/* ============================================================ */}
+          {/* Current Weather + Details */}
+          {/* ============================================================ */}
+
+          <section className="mb-12 grid gap-8 xl:grid-cols-[1.2fr_0.8fr]">
+
             <WeatherCard weather={weather} />
-          </section>
 
-          {/* Weather Details */}
-          <section>
             <WeatherDetails weather={weather} />
+
           </section>
 
+          {/* ============================================================ */}
           {/* Hourly Forecast */}
-          <section className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold">
+          {/* ============================================================ */}
+
+          <section className="mb-12 space-y-6">
+
+            <div className="space-y-2">
+
+              <h2 className="text-3xl font-bold tracking-tight">
                 Hourly Forecast
               </h2>
 
-              <p className="mt-2 text-muted">
-                Weather conditions throughout the day.
+              <p className="text-muted-foreground">
+                Weather conditions throughout today.
               </p>
+
             </div>
 
             <HourlyForecast weather={weather} />
+
           </section>
 
-          {/* Five-Day Forecast */}
+          {/* ============================================================ */}
+          {/* 5-Day Forecast */}
+          {/* ============================================================ */}
+
           <section className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold">
+
+            <div className="space-y-2">
+
+              <h2 className="text-3xl font-bold tracking-tight">
                 5-Day Forecast
               </h2>
 
-              <p className="mt-2 text-muted">
+              <p className="text-muted-foreground">
                 Weather outlook for the upcoming days.
               </p>
+
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
+
               {weather.forecast.forecastday.map((day) => (
                 <ForecastCard
                   key={day.date_epoch}
                   forecast={day}
                 />
               ))}
+
             </div>
+
           </section>
+
         </div>
+
       </div>
+
     </main>
   );
 }

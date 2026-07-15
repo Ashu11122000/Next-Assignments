@@ -16,14 +16,15 @@ import type { WeatherResponse } from "@/types/weather";
  * Hourly Forecast
  * ============================================================================
  *
- * Displays today's hourly forecast using WeatherAPI data.
+ * Premium horizontally scrollable hourly forecast.
  *
- * Features:
- * - Horizontally scrollable
- * - Responsive
- * - Weather icons
- * - Temperature
- * - Condition
+ * Features
+ * --------
+ * ✓ Responsive
+ * ✓ Smooth scrolling
+ * ✓ Glass cards
+ * ✓ Premium spacing
+ * ✓ Hover animations
  * ============================================================================
  */
 
@@ -39,29 +40,37 @@ function ForecastItem({
   hour,
 }: Readonly<ForecastItemProps>) {
   return (
-    <div className="flex min-w-[120px] flex-col items-center rounded-2xl border border-default bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <div className="mb-3 flex items-center gap-1 text-sm text-muted">
-        <Clock className="size-4" />
+    <div className="group flex min-w-[132px] flex-col items-center rounded-3xl border border-border/50 bg-background/70 p-5 shadow-sm backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+
+      {/* Time */}
+      <div className="flex items-center gap-2 rounded-full bg-muted/40 px-3 py-1 text-sm font-medium text-muted-foreground">
+        <Clock className="size-4 text-primary" />
 
         <span>
           {format(new Date(hour.time), "ha")}
         </span>
       </div>
 
-      <Image
-        src={`https:${hour.condition.icon}`}
-        alt={hour.condition.text}
-        width={56}
-        height={56}
-      />
+      {/* Weather Icon */}
+      <div className="my-5 transition-transform duration-300 group-hover:scale-110">
+        <Image
+          src={`https:${hour.condition.icon}`}
+          alt={hour.condition.text}
+          width={72}
+          height={72}
+        />
+      </div>
 
-      <p className="mt-2 text-2xl font-bold">
+      {/* Temperature */}
+      <p className="text-3xl font-bold tracking-tight">
         {Math.round(hour.temp_c)}°
       </p>
 
-      <p className="mt-2 line-clamp-2 text-center text-xs text-muted">
+      {/* Condition */}
+      <p className="mt-3 line-clamp-2 text-center text-xs leading-5 text-muted-foreground">
         {hour.condition.text}
       </p>
+
     </div>
   );
 }
@@ -81,7 +90,7 @@ export default function HourlyForecast({
       </CardHeader>
 
       <CardContent>
-        <div className="flex gap-4 overflow-x-auto pb-2">
+        <div className="flex gap-5 overflow-x-auto pb-3 pr-1 scrollbar-none">
           {hourlyForecast.map((hour) => (
             <ForecastItem
               key={hour.time_epoch}

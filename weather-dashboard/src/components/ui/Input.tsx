@@ -7,23 +7,16 @@ import { cn } from "@/lib/utils";
  * Input Component
  * ============================================================================
  *
- * A reusable, accessible input component.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
+ * Premium reusable input component.
  *
  * Features
  * --------
- * ✓ Ref forwarding
- * ✓ Disabled state
- * ✓ Invalid state
- * ✓ File input support
- * ✓ Search input support
+ * ✓ Glassmorphism inspired
+ * ✓ Better spacing
+ * ✓ Smooth focus animations
  * ✓ Accessible
- * ✓ Tailwind Merge support
+ * ✓ Search & file input support
+ * ✓ Responsive
  * ============================================================================
  */
 
@@ -41,16 +34,56 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         data-slot="input"
         aria-invalid={error}
         className={cn(
-          "flex h-10 w-full rounded-xl border border-default bg-background px-3 py-2 text-sm text-foreground shadow-sm transition-colors",
-          "placeholder:text-muted",
-          "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-          "focus-visible:outline-none",
-          "focus-visible:ring-2",
-          "focus-visible:ring-ring",
-          "focus-visible:ring-offset-2",
-          "disabled:cursor-not-allowed disabled:opacity-50",
+          [
+            // Layout
+            "flex h-12 w-full",
+            "rounded-2xl",
+
+            // Spacing
+            "px-4 py-3",
+
+            // Typography
+            "text-sm font-medium tracking-wide",
+            "text-foreground",
+            "placeholder:text-muted-foreground",
+
+            // Glass
+            "border border-border/60",
+            "bg-background/80",
+            "backdrop-blur-xl",
+
+            // Shadow
+            "shadow-sm",
+
+            // Animation
+            "transition-all duration-300 ease-out",
+
+            // Focus
+            "focus-visible:outline-none",
+            "focus-visible:ring-2",
+            "focus-visible:ring-primary/30",
+            "focus-visible:border-primary/40",
+            "focus-visible:shadow-lg",
+
+            // Disabled
+            "disabled:cursor-not-allowed",
+            "disabled:opacity-50",
+
+            // File input
+            "file:border-0",
+            "file:bg-transparent",
+            "file:text-sm",
+            "file:font-semibold",
+            "file:text-foreground",
+          ].join(" "),
+
           error &&
-            "border-red-500 focus-visible:ring-red-500",
+            [
+              "border-red-500/60",
+              "focus-visible:border-red-500",
+              "focus-visible:ring-red-500/30",
+            ].join(" "),
+
           className
         )}
         {...props}

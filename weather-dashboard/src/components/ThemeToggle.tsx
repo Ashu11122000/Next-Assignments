@@ -11,10 +11,11 @@ import { Button } from "@/components/ui/Button";
  * Theme Toggle
  * ============================================================================
  *
+ * Premium theme switcher.
+ *
  * React 19 + Next.js 16
  *
- * Uses useSyncExternalStore instead of mounted state
- * to avoid hydration warnings and React 19 lint errors.
+ * Uses useSyncExternalStore to avoid hydration warnings.
  * ============================================================================
  */
 
@@ -38,6 +39,7 @@ export default function ThemeToggle() {
         variant="ghost"
         disabled
         aria-label="Toggle theme"
+        className="rounded-2xl"
       >
         <Sun className="size-5 opacity-0" />
       </Button>
@@ -56,11 +58,12 @@ export default function ThemeToggle() {
       onClick={() =>
         setTheme(isDark ? "light" : "dark")
       }
+      className="group rounded-2xl border border-border/50 bg-background/60 backdrop-blur-xl shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-muted/70 hover:shadow-lg"
     >
       {isDark ? (
-        <Sun className="size-5 transition-transform duration-200" />
+        <Sun className="size-5 text-amber-500 transition-all duration-300 group-hover:rotate-180 group-hover:scale-110" />
       ) : (
-        <Moon className="size-5 transition-transform duration-200" />
+        <Moon className="size-5 text-slate-700 transition-all duration-300 dark:text-slate-300 group-hover:-rotate-12 group-hover:scale-110" />
       )}
     </Button>
   );

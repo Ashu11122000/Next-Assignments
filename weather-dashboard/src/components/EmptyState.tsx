@@ -13,36 +13,23 @@ import {
  * Empty State
  * ============================================================================
  *
- * Server Component
- *
- * Generic empty state component for displaying
- * friendly messages when no data is available.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
+ * Premium reusable empty state component.
  *
  * Features
  * --------
- * ✓ Reusable
+ * ✓ Premium dashboard styling
+ * ✓ Glassmorphism ready
+ * ✓ Responsive
  * ✓ Accessible
- * ✓ Customizable
- * ✓ Icon support
- * ✓ Optional action button
+ * ✓ Optional CTA
  * ============================================================================
  */
 
 export interface EmptyStateProps {
   title: string;
-
   description: string;
-
   icon?: React.ReactNode;
-
   actionLabel?: string;
-
   actionHref?: string;
 }
 
@@ -54,29 +41,38 @@ export default function EmptyState({
   actionHref,
 }: EmptyStateProps) {
   return (
-    <Card>
-      <CardContent className="flex flex-col items-center justify-center px-6 py-16 text-center">
-        <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-muted">
+    <Card className="overflow-hidden">
+      <CardContent className="relative flex min-h-[420px] flex-col items-center justify-center px-8 py-14 text-center">
+
+        {/* Background Glow */}
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-sky-500/5 via-cyan-500/5 to-blue-500/5" />
+
+        {/* Icon */}
+        <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full border border-border/50 bg-background/70 shadow-lg backdrop-blur-xl transition-transform duration-300 hover:scale-105">
           {icon ?? (
             <CloudOff
-              className="size-10 text-muted"
+              className="h-12 w-12 text-sky-500"
               aria-hidden="true"
             />
           )}
         </div>
 
-        <h2 className="text-2xl font-bold tracking-tight">
+        {/* Title */}
+        <h2 className="max-w-xl text-3xl font-bold tracking-tight text-foreground">
           {title}
         </h2>
 
-        <p className="mt-3 max-w-md text-muted">
+        {/* Description */}
+        <p className="mt-4 max-w-lg text-base leading-7 text-muted-foreground">
           {description}
         </p>
 
+        {/* Action */}
         {actionLabel && actionHref && (
           <Button
             asChild
-            className="mt-8"
+            size="lg"
+            className="mt-10 min-w-[180px]"
           >
             <Link href={actionHref}>
               {actionLabel}

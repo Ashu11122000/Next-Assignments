@@ -7,21 +7,16 @@ import { cn } from "@/lib/utils";
  * Card Component
  * ============================================================================
  *
- * A reusable card component for building consistent layouts.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
+ * Premium reusable card component.
  *
  * Features
  * --------
- * ✓ Reusable composition
- * ✓ Accessible markup
- * ✓ Responsive layout
- * ✓ Glassmorphism-ready
- * ✓ Tailwind Merge support
+ * ✓ Glassmorphism inspired
+ * ✓ Premium shadows
+ * ✓ Better spacing
+ * ✓ Responsive
+ * ✓ Hover animations
+ * ✓ Accessible
  * ============================================================================
  */
 
@@ -32,7 +27,34 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-2xl border border-default bg-card text-card-foreground shadow-sm transition-shadow duration-200",
+      [
+        "relative overflow-hidden",
+
+        // Layout
+        "rounded-3xl",
+
+        // Glass effect
+        "border border-border/50",
+        "bg-card/80",
+        "backdrop-blur-xl",
+
+        // Text
+        "text-card-foreground",
+
+        // Shadow
+        "shadow-sm",
+        "hover:shadow-xl",
+
+        // Animation
+        "transition-all duration-300 ease-out",
+        "hover:-translate-y-1",
+
+        // Optional subtle highlight
+        "before:absolute before:inset-0 before:pointer-events-none",
+        "before:rounded-3xl",
+        "before:bg-gradient-to-br",
+        "before:from-white/5 before:to-transparent",
+      ].join(" "),
       className
     )}
     {...props}
@@ -48,7 +70,11 @@ const CardHeader = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex flex-col space-y-1.5 p-6",
+      [
+        "flex flex-col",
+        "space-y-2",
+        "px-7 pt-7 pb-5",
+      ].join(" "),
       className
     )}
     {...props}
@@ -64,7 +90,12 @@ const CardTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "text-xl font-semibold tracking-tight",
+      [
+        "text-xl",
+        "font-bold",
+        "tracking-tight",
+        "leading-none",
+      ].join(" "),
       className
     )}
     {...props}
@@ -80,7 +111,11 @@ const CardDescription = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "text-sm text-muted",
+      [
+        "text-sm",
+        "leading-relaxed",
+        "text-muted-foreground",
+      ].join(" "),
       className
     )}
     {...props}
@@ -96,7 +131,11 @@ const CardContent = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "p-6 pt-0",
+      [
+        "px-7",
+        "pb-7",
+        "pt-0",
+      ].join(" "),
       className
     )}
     {...props}
@@ -112,7 +151,13 @@ const CardFooter = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex items-center p-6 pt-0",
+      [
+        "flex items-center justify-between",
+        "gap-3",
+        "px-7",
+        "pb-7",
+        "pt-0",
+      ].join(" "),
       className
     )}
     {...props}

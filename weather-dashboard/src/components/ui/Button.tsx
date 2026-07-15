@@ -10,47 +10,52 @@ import { cn } from "@/lib/utils";
  * Button Component
  * ============================================================================
  *
- * A reusable, accessible, production-ready button component.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
- * - Radix Slot
- * - class-variance-authority
+ * Premium reusable button component.
  *
  * Features
  * --------
- * ✓ Variants
- * ✓ Sizes
+ * ✓ Modern glassmorphism styling
+ * ✓ Gradient primary button
+ * ✓ Better hover animations
  * ✓ Loading state
- * ✓ Disabled state
  * ✓ Icon support
+ * ✓ Accessible
  * ✓ asChild support
- * ✓ Ref forwarding
- * ✓ Keyboard accessible
- * ✓ Tailwind Merge
+ * ✓ Type-safe variants
  * ============================================================================
  */
 
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-2",
-    "whitespace-nowrap rounded-xl",
-    "font-medium",
-    "transition-all duration-200",
+    "rounded-2xl",
+    "whitespace-nowrap",
+    "font-semibold",
+    "tracking-wide",
     "select-none",
-    "outline-none",
     "cursor-pointer",
+    "outline-none",
+    "relative overflow-hidden",
 
+    // Animation
+    "transition-all duration-300 ease-out",
+    "active:scale-[0.98]",
+    "hover:-translate-y-0.5",
+
+    // Focus
     "focus-visible:ring-2",
-    "focus-visible:ring-ring",
+    "focus-visible:ring-primary/40",
     "focus-visible:ring-offset-2",
 
+    // Disabled
     "disabled:pointer-events-none",
     "disabled:opacity-50",
 
+    // Shadow
+    "shadow-sm",
+    "hover:shadow-lg",
+
+    // SVG
     "[&_svg]:pointer-events-none",
     "[&_svg]:size-4",
     "[&_svg]:shrink-0",
@@ -59,32 +64,71 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground hover:opacity-90",
+          [
+            "border border-transparent",
+            "bg-gradient-to-r from-sky-500 via-cyan-500 to-blue-600",
+            "text-white",
+            "shadow-blue-500/20",
+            "hover:shadow-blue-500/30",
+            "hover:brightness-110",
+          ].join(" "),
 
         secondary:
-          "bg-secondary text-secondary-foreground hover:opacity-90",
+          [
+            "border border-border/60",
+            "bg-secondary/80",
+            "backdrop-blur-xl",
+            "text-secondary-foreground",
+            "hover:bg-secondary",
+          ].join(" "),
 
         outline:
-          "border border-default bg-transparent hover:bg-muted",
+          [
+            "border border-border",
+            "bg-background/70",
+            "backdrop-blur-md",
+            "text-foreground",
+            "hover:bg-muted/60",
+          ].join(" "),
 
         ghost:
-          "hover:bg-muted hover:text-foreground",
+          [
+            "bg-transparent",
+            "text-foreground",
+            "hover:bg-muted/70",
+          ].join(" "),
 
         destructive:
-          "bg-red-600 text-white hover:bg-red-700",
+          [
+            "border border-red-500/20",
+            "bg-gradient-to-r from-red-500 to-rose-600",
+            "text-white",
+            "hover:brightness-110",
+            "shadow-red-500/20",
+          ].join(" "),
 
         link:
-          "underline-offset-4 hover:underline text-primary bg-transparent p-0 h-auto",
+          [
+            "h-auto rounded-none",
+            "bg-transparent",
+            "p-0",
+            "text-primary",
+            "shadow-none",
+            "hover:translate-y-0",
+            "hover:shadow-none",
+            "underline-offset-4",
+            "hover:underline",
+          ].join(" "),
       },
 
       size: {
-        sm: "h-9 px-3 text-sm",
+        sm: "h-9 px-4 text-sm",
 
-        default: "h-10 px-4 py-2",
+        default: "h-11 px-5 text-sm",
 
-        lg: "h-11 px-8",
+        lg: "h-12 px-7 text-base",
 
-        icon: "h-10 w-10 p-0",
+        icon: "size-11 p-0",
       },
 
       fullWidth: {

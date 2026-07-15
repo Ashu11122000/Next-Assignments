@@ -19,14 +19,15 @@ import type { ForecastDay } from "@/types/weather";
  * Forecast Card
  * ============================================================================
  *
- * Displays a single day's weather forecast using WeatherAPI data.
+ * Displays a premium weather forecast card.
  *
- * Features:
- * - Day of week
- * - Weather icon
- * - Condition
- * - Max / Min temperature
- * - Chance of rain
+ * Features
+ * --------
+ * ✓ Day of week
+ * ✓ Weather icon
+ * ✓ Weather condition
+ * ✓ Max / Min temperature
+ * ✓ Chance of rain
  * ============================================================================
  */
 
@@ -43,52 +44,60 @@ export default function ForecastCard({
   } = forecast;
 
   return (
-    <Card className="transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <CardContent className="flex flex-col items-center gap-5 p-6 text-center">
-        <div className="flex items-center gap-2 text-sm text-muted">
-          <CalendarDays className="size-4" />
+    <Card className="group h-full overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+      <CardContent className="flex h-full flex-col items-center justify-between p-7 text-center">
 
-          <span>
-            {format(new Date(date), "EEEE")}
-          </span>
+        {/* Day */}
+        <div className="flex items-center gap-2 rounded-full bg-muted/40 px-3 py-1.5 text-sm font-medium text-muted-foreground backdrop-blur-md">
+          <CalendarDays className="size-4 text-primary" />
+          <span>{format(new Date(date), "EEEE")}</span>
         </div>
 
-        <Image
-          src={`https:${day.condition.icon}`}
-          alt={day.condition.text}
-          width={72}
-          height={72}
-        />
+        {/* Weather Icon */}
+        <div className="my-6 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+          <Image
+            src={`https:${day.condition.icon}`}
+            alt={day.condition.text}
+            width={90}
+            height={90}
+            priority={false}
+          />
+        </div>
 
-        <Badge variant="secondary">
+        {/* Weather Condition */}
+        <Badge
+          variant="secondary"
+          className="mb-6"
+        >
           {day.condition.text}
         </Badge>
 
-        <div className="flex items-center gap-5">
+        {/* Temperature */}
+        <div className="mb-6 flex items-center justify-center gap-5">
           <div className="flex items-center gap-2">
-            <Thermometer className="size-4 text-red-500" />
+            <Thermometer className="size-5 text-red-500" />
 
-            <span className="font-semibold">
+            <span className="text-xl font-bold">
               {Math.round(day.maxtemp_c)}°
             </span>
           </div>
 
-          <span className="text-muted">
-            /
-          </span>
+          <div className="h-7 w-px bg-border" />
 
-          <span className="font-medium text-muted">
+          <div className="text-lg font-medium text-muted-foreground">
             {Math.round(day.mintemp_c)}°
-          </span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted">
-          <Droplets className="size-4 text-blue-500" />
+        {/* Rain */}
+        <div className="flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-600 dark:text-sky-400">
+          <Droplets className="size-4" />
 
           <span>
             {day.daily_chance_of_rain}% Rain
           </span>
         </div>
+
       </CardContent>
     </Card>
   );

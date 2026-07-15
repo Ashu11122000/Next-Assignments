@@ -5,23 +5,34 @@ import WeatherSkeleton from "@/components/WeatherSkeleton";
  * Weather Page Loading
  * ============================================================================
  *
- * Route-level loading UI for the Weather Dashboard.
+ * Route-level loading UI.
  *
- * This component is automatically rendered by the Next.js App Router
- * while the Weather Server Component fetches weather data.
+ * Automatically rendered while weather data is being fetched.
  *
- * Responsibilities:
- * - Display a reusable loading skeleton
- * - Prevent layout shifts
- * - Keep loading UI consistent across the application
- *
+ * Features
+ * --------
+ * ✓ Premium loading experience
+ * ✓ Matches dashboard layout
+ * ✓ Prevents layout shifts
+ * ✓ Responsive
  * ============================================================================
  */
 
 export default function WeatherLoading() {
   return (
     <main className="min-h-screen bg-background">
-      <WeatherSkeleton />
+
+      <div className="relative">
+
+        {/* Background Glow */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-sky-500/10 via-cyan-500/5 to-transparent" />
+
+        <div className="container mx-auto max-w-7xl px-4 py-10 lg:px-6">
+          <WeatherSkeleton />
+        </div>
+
+      </div>
+
     </main>
   );
 }

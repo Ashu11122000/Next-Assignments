@@ -8,23 +8,15 @@ import { cn } from "@/lib/utils";
  * Spinner Component
  * ============================================================================
  *
- * A reusable loading spinner built using Lucide React.
- *
- * Built with:
- * - React 19
- * - Next.js 16
- * - TypeScript
- * - Tailwind CSS v4
- * - Lucide React
+ * Premium reusable loading spinner.
  *
  * Features
  * --------
- * ✓ Multiple sizes
- * ✓ Accessible
- * ✓ Custom styling
  * ✓ Lightweight
- * ✓ Reusable
- * ✓ Tailwind Merge support
+ * ✓ Accessible
+ * ✓ Responsive
+ * ✓ Multiple sizes
+ * ✓ Smooth animation
  * ============================================================================
  */
 
@@ -59,15 +51,20 @@ const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
         aria-label={label}
         className={cn(
           "inline-flex items-center justify-center",
+          "select-none",
           className
         )}
         {...props}
       >
         <Loader2
           className={cn(
-            "animate-spin text-primary",
+            "animate-spin",
+            "text-primary",
+            "opacity-90",
+            "transition-colors duration-300",
             spinnerSizes[size]
           )}
+          strokeWidth={2.25}
           aria-hidden="true"
         />
 
