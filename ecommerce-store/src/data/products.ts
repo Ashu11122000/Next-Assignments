@@ -235,7 +235,7 @@ export const products: Product[] = [
     sku: "APL-MBP16-M4",
 
     thumbnail:
-      "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=800&q=80",
+      "https://images.unsplash.com/photo-1741899154753-zPtPMIyzWCA?auto=format&fit=crop&w=1200&q=80",
 
     images: [
       "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?w=1200&q=80",
