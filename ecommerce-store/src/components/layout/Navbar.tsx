@@ -5,7 +5,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Menu, Search, X } from "lucide-react";
+import {
+  LogOut,
+  Menu,
+  Search,
+  User,
+  X,
+} from "lucide-react";
+
+import { useRouter } from "next/navigation";
+
+import { useAuth } from "@/components/providers/AuthProvider";
 
 import Button from "@/components/common/Button";
 import Container from "@/components/common/Container";
@@ -21,6 +31,12 @@ import { cn } from "@/lib/utils";
 
 export default function Navbar() {
   const pathname = usePathname();
+const router = useRouter();
+const {
+  user,
+  isAuthenticated,
+  logout,
+} = useAuth();
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -45,6 +61,18 @@ export default function Navbar() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  /* ------------------------------------------------------------------------ */
+/* Logout                                                                   */
+/* ------------------------------------------------------------------------ */
+
+async function handleLogout() {
+  await logout();
+
+  setMobileMenuOpen(false);
+
+  router.push("/");
+}
 
   /* ------------------------------------------------------------------------ */
   /* Render                                                                   */
@@ -127,10 +155,46 @@ export default function Navbar() {
                 <Search className="h-5 w-5" />
               </Button>
 
-              <Button asChild variant="primary">
-                <Link href={ROUTES.products}>Explore Products</Link>
-              </Button>
-            </div>
+              {isAuthenticated ? (
+  <>
+    <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-3 py-2">
+      <User className="h-4 w-4 text-primary" />
+
+      <span className="max-w-28 truncate text-sm font-medium">
+        {user?.firstName}
+      </span>
+    </div>
+
+    <Button
+      variant="outline"
+      onClick={handleLogout}
+    >
+      <LogOut className="mr-2 h-4 w-4" />
+      Logout
+    </Button>
+  </>
+) : (
+  <>
+    <Button
+      asChild
+      variant="ghost"
+    >
+      <Link href="/login">
+        Login
+      </Link>
+    </Button>
+
+    <Button
+      asChild
+      variant="primary"
+    >
+      <Link href="/register">
+        Register
+      </Link>
+    </Button>
+  </>
+)}
+</div>
 
             {/* -------------------------------------------------------------- */}
             {/* Mobile Menu Toggle                                             */}
@@ -218,14 +282,59 @@ export default function Navbar() {
               {/* Mobile Action                                                */}
               {/* ------------------------------------------------------------ */}
 
-              <Button asChild className="w-full">
-                <Link
-                  href={ROUTES.products}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Explore Products
-                </Link>
-              </Button>
+              {isAuthenticated ? (
+  <div className="space-y-4">
+    <div className="flex items-center gap-3 rounded-xl border border-border bg-muted/30 p-4">
+      <User className="h-5 w-5 text-primary" />
+
+      <div className="min-w-0">
+        <p className="truncate font-medium">
+          {user?.firstName} {user?.lastName}
+        </p>
+
+        <p className="truncate text-sm text-muted-foreground">
+          {user?.email}
+        </p>
+      </div>
+    </div>
+
+    <Button
+      variant="outline"
+      className="w-full"
+      onClick={handleLogout}
+    >
+      <LogOut className="mr-2 h-4 w-4" />
+      Logout
+    </Button>
+  </div>
+) : (
+  <div className="grid gap-3">
+    <Button
+      asChild
+      variant="ghost"
+      className="w-full"
+    >
+      <Link
+        href="/login"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Login
+      </Link>
+    </Button>
+
+    <Button
+      asChild
+      className="w-full"
+    >
+      <Link
+        href="/register"
+        onClick={() => setMobileMenuOpen(false)}
+      >
+        Create Account
+      </Link>
+    </Button>
+  </div>
+)}
             </div>
           </div>
         )}

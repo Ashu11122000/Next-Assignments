@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import AuthProvider from "@/components/providers/AuthProvider";
+
 import "./globals.css";
+
+/* -------------------------------------------------------------------------- */
+/* Fonts                                                                      */
+/* -------------------------------------------------------------------------- */
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,6 +19,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+/* -------------------------------------------------------------------------- */
+/* Metadata                                                                   */
+/* -------------------------------------------------------------------------- */
+
 export const metadata: Metadata = {
   title: {
     default: "Ecommerce Store",
@@ -21,6 +31,10 @@ export const metadata: Metadata = {
   description:
     "Modern ecommerce store built with Next.js 16, TypeScript, and Tailwind CSS.",
 };
+
+/* -------------------------------------------------------------------------- */
+/* Root Layout                                                                */
+/* -------------------------------------------------------------------------- */
 
 export default function RootLayout({
   children,
@@ -34,7 +48,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen bg-background text-foreground antialiased">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
