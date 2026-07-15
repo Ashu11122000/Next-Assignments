@@ -9,83 +9,69 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 
+import type { WeatherResponse } from "@/types/weather";
+
 /**
  * ============================================================================
  * Hourly Forecast
  * ============================================================================
  *
- * Server Component
+ * Displays today's hourly forecast using WeatherAPI data.
  *
- * Displays the hourly weather forecast in a horizontally
- * scrollable layout.
- *
- * Built with:
- * - Next.js 16
- * - React 19
- * - TypeScript
- * - Tailwind CSS v4
- * - Next/Image
- * - date-fns
- *
- * Features
- * --------
- * ✓ Responsive
- * ✓ Horizontal scrolling
- * ✓ Premium UI
- * ✓ Image optimization
- * ✓ Accessible
+ * Features:
+ * - Horizontally scrollable
+ * - Responsive
+ * - Weather icons
+ * - Temperature
+ * - Condition
  * ============================================================================
  */
 
-export interface HourlyForecastItem {
-  time: string;
-  temperature: number;
-  condition: string;
-  icon: string;
-}
-
 interface HourlyForecastProps {
-  forecast: HourlyForecastItem[];
+  weather: WeatherResponse;
 }
 
 interface ForecastItemProps {
-  item: HourlyForecastItem;
+  hour: WeatherResponse["forecast"]["forecastday"][0]["hour"][number];
 }
 
 function ForecastItem({
-  item,
-}: ForecastItemProps) {
+  hour,
+}: Readonly<ForecastItemProps>) {
   return (
     <div className="flex min-w-[120px] flex-col items-center rounded-2xl border border-default bg-card p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
       <div className="mb-3 flex items-center gap-1 text-sm text-muted">
         <Clock className="size-4" />
 
         <span>
-          {format(new Date(item.time), "ha")}
+          {format(new Date(hour.time), "ha")}
         </span>
       </div>
 
       <Image
-        src={`https:${item.icon}`}
-        alt={item.condition}
+        src={`https:${hour.condition.icon}`}
+        alt={hour.condition.text}
         width={56}
         height={56}
       />
 
       <p className="mt-2 text-2xl font-bold">
-        {Math.round(item.temperature)}°
+        {Math.round(hour.temp_c)}°
       </p>
 
-      <p className="mt-2 text-center text-xs text-muted line-clamp-2">
-        {item.condition}
+      <p className="mt-2 line-clamp-2 text-center text-xs text-muted">
+        {hour.condition.text}
       </p>
     </div>
   );
 }
 
 export default function HourlyForecast({
-  forecast,
-}: HourlyForecastProps) {
+  weather,
+}: Readonly<HourlyForecastProps>) {
+  const hourlyForecast =
+    weather.forecast.forecastday[0]?.hour ?? [];
+
   return (
     <Card>
       <CardHeader>
@@ -96,10 +82,10 @@ export default function HourlyForecast({
 
       <CardContent>
         <div className="flex gap-4 overflow-x-auto pb-2">
-          {forecast.map((hour) => (
+          {hourlyForecast.map((hour) => (
             <ForecastItem
-              key={hour.time}
-              item={hour}
+              key={hour.time_epoch}
+              hour={hour}
             />
           ))}
         </div>

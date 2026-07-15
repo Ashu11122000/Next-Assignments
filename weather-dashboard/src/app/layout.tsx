@@ -1,5 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { ThemeProvider } from "next-themes";
 
 import {
   APP_DESCRIPTION,
@@ -13,14 +15,15 @@ import "./globals.css";
  * Root Layout
  * ============================================================================
  *
- * Shared layout used across the Weather Dashboard.
+ * Shared layout for the Weather Dashboard.
  *
- * Features
+ * Features:
  * - Global metadata
  * - SEO
  * - Open Graph
- * - Twitter Card
- * - Google Geist Fonts
+ * - Twitter Cards
+ * - Theme Provider
+ * - Google Geist fonts
  * - Global styles
  * ============================================================================
  */
@@ -50,13 +53,12 @@ export const metadata: Metadata = {
     "Weather Dashboard",
     "WeatherAPI",
     "Forecast",
-    "Current Weather",
     "Next.js",
     "React",
     "TypeScript",
     "Tailwind CSS",
-    "Server Components",
     "App Router",
+    "Server Components",
   ],
 
   authors: [
@@ -72,9 +74,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: APP_NAME,
     description: APP_DESCRIPTION,
+    siteName: APP_NAME,
     type: "website",
     locale: "en_US",
-    siteName: APP_NAME,
   },
 
   twitter: {
@@ -87,6 +89,29 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
+
+  colorScheme: "light dark",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: [
+    {
+      media: "(prefers-color-scheme: light)",
+      color: "#ffffff",
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: "#020817",
+    },
+  ],
 };
 
 interface RootLayoutProps {
@@ -97,11 +122,21 @@ export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

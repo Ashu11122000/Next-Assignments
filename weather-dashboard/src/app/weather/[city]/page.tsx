@@ -1,6 +1,12 @@
-import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+import ForecastCard from "@/components/ForecastCard";
+import HourlyForecast from "@/components/HourlyForecast";
+import Navbar from "@/components/Navbar";
+import SearchBar from "@/components/SearchBar";
+import WeatherCard from "@/components/WeatherCard";
+import WeatherDetails from "@/components/WeatherDetails";
 
 import { getWeather } from "@/lib/weather";
 import type { WeatherResponse } from "@/types/weather";
@@ -12,7 +18,12 @@ import type { WeatherResponse } from "@/types/weather";
  *
  * Server Component
  *
- * Uses WeatherAPI.com
+ * Responsibilities:
+ * - Fetch weather data from WeatherAPI.com
+ * - Generate dynamic metadata
+ * - Handle invalid cities
+ * - Compose reusable UI components
+ *
  * ============================================================================
  */
 
@@ -37,7 +48,7 @@ export async function generateMetadata({
 
 export default async function WeatherPage({
   params,
-}: WeatherPageProps) {
+}: Readonly<WeatherPageProps>) {
   const { city } = await params;
 
   const decodedCity = decodeURIComponent(city);
@@ -47,193 +58,94 @@ export default async function WeatherPage({
   try {
     weather = await getWeather(decodedCity);
   } catch (error) {
-    console.error("Weather Fetch Error");
-    console.error(error);
-
-    // Uncomment after debugging
-    // notFound();
-
-    throw error;
+    console.error("Weather Fetch Error:", error);
+    notFound();
   }
 
   return (
-    <main className="container mx-auto min-h-screen px-4 py-10">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <header>
-          <h1 className="text-4xl font-bold">
-            Weather Dashboard
-          </h1>
+    <main className="min-h-screen bg-background">
+      {/* Navigation */}
+      <Navbar />
 
-          <p className="mt-2 text-muted">
-            Weather data powered by WeatherAPI.com
-          </p>
-        </header>
+      <div className="container mx-auto px-4 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8">
+          {/* Hero Section */}
+          <section className="space-y-6">
+            <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div className="space-y-3">
+                <span className="inline-flex w-fit rounded-full bg-primary/10 px-4 py-1 text-sm font-medium text-primary">
+                  Live Weather
+                </span>
 
-        {/* Current Weather */}
+                <div className="space-y-2">
+                  <h1 className="text-4xl font-bold tracking-tight md:text-5xl">
+                    {weather.location.name}
+                  </h1>
 
-        <section className="rounded-xl border border-default bg-card p-6 shadow-sm">
-          <h2 className="mb-6 text-2xl font-semibold">
-            Current Weather
-          </h2>
-
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <p className="text-sm text-muted">City</p>
-              <p className="font-medium">
-                {weather.location.name}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">Region</p>
-              <p className="font-medium">
-                {weather.location.region}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">Country</p>
-              <p className="font-medium">
-                {weather.location.country}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Temperature
-              </p>
-              <p className="font-medium">
-                {weather.current.temp_c}°C
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Feels Like
-              </p>
-              <p className="font-medium">
-                {weather.current.feelslike_c}°C
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Condition
-              </p>
-              <p className="font-medium">
-                {weather.current.condition.text}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Humidity
-              </p>
-              <p className="font-medium">
-                {weather.current.humidity}%
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Wind
-              </p>
-              <p className="font-medium">
-                {weather.current.wind_kph} km/h
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Pressure
-              </p>
-              <p className="font-medium">
-                {weather.current.pressure_mb} mb
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Visibility
-              </p>
-              <p className="font-medium">
-                {weather.current.vis_km} km
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                UV Index
-              </p>
-              <p className="font-medium">
-                {weather.current.uv}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm text-muted">
-                Local Time
-              </p>
-              <p className="font-medium">
-                {weather.location.localtime}
-              </p>
-            </div>
-
-            <div className="flex items-center">
-              <Image
-                src={`https:${weather.current.condition.icon}`}
-                alt={weather.current.condition.text}
-                width={64}
-                height={64}
-                priority
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Forecast */}
-
-        <section className="rounded-xl border border-default bg-card p-6 shadow-sm">
-          <h2 className="mb-6 text-2xl font-semibold">
-            5-Day Forecast
-          </h2>
-
-          <div className="space-y-4">
-            {weather.forecast.forecastday.map((day) => (
-              <div
-                key={day.date_epoch}
-                className="flex items-center justify-between rounded-lg border border-default p-4"
-              >
-                <div>
-                  <p className="font-medium">
-                    {day.date}
+                  <p className="text-lg text-muted">
+                    {weather.location.region},{" "}
+                    {weather.location.country}
                   </p>
 
                   <p className="text-sm text-muted">
-                    {day.day.condition.text}
-                  </p>
-                </div>
-
-                <Image
-                  src={`https:${day.day.condition.icon}`}
-                  alt={day.day.condition.text}
-                  width={48}
-                  height={48}
-                />
-
-                <div className="text-right">
-                  <p className="font-semibold">
-                    {day.day.maxtemp_c}°C
-                  </p>
-
-                  <p className="text-sm text-muted">
-                    {day.day.mintemp_c}°C
+                    Local Time • {weather.location.localtime}
                   </p>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+
+              <div className="w-full max-w-xl">
+                <SearchBar />
+              </div>
+            </div>
+          </section>
+
+          {/* Current Weather */}
+          <section>
+            <WeatherCard weather={weather} />
+          </section>
+
+          {/* Weather Details */}
+          <section>
+            <WeatherDetails weather={weather} />
+          </section>
+
+          {/* Hourly Forecast */}
+          <section className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold">
+                Hourly Forecast
+              </h2>
+
+              <p className="mt-2 text-muted">
+                Weather conditions throughout the day.
+              </p>
+            </div>
+
+            <HourlyForecast weather={weather} />
+          </section>
+
+          {/* Five-Day Forecast */}
+          <section className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold">
+                5-Day Forecast
+              </h2>
+
+              <p className="mt-2 text-muted">
+                Weather outlook for the upcoming days.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              {weather.forecast.forecastday.map((day) => (
+                <ForecastCard
+                  key={day.date_epoch}
+                  forecast={day}
+                />
+              ))}
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );

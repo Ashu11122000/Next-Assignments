@@ -1,67 +1,89 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
-import { useSyncExternalStore } from "react";
-import { useTheme } from "next-themes";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2, MapPin, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 
 /**
  * ============================================================================
- * Theme Toggle
+ * Search Bar
  * ============================================================================
  *
- * React 19 + Next.js 16
+ * Client Component
  *
- * Uses useSyncExternalStore instead of mounted state
- * to avoid hydration warnings and React 19 lint errors.
+ * Features:
+ * - Search any city
+ * - Enter key support
+ * - Search button
+ * - Loading state
+ * - Responsive
+ * - Accessible
  * ============================================================================
  */
 
-function useMounted() {
-  return useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-}
+export default function SearchBar() {
+  const router = useRouter();
 
-export default function ThemeToggle() {
-  const mounted = useMounted();
+  const [city, setCity] = useState("");
+  const [isPending, startTransition] = useTransition();
 
-  const { resolvedTheme, setTheme } = useTheme();
+  function handleSearch() {
+    const value = city.trim();
 
-  if (!mounted) {
-    return (
-      <Button
-        size="icon"
-        variant="ghost"
-        disabled
-        aria-label="Toggle theme"
-      >
-        <Sun className="size-5 opacity-0" />
-      </Button>
-    );
+    if (!value) return;
+
+    startTransition(() => {
+      router.push(`/weather/${encodeURIComponent(value)}`);
+    });
   }
 
-  const isDark = resolvedTheme === "dark";
+  function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    handleSearch();
+  }
 
   return (
-    <Button
-      type="button"
-      size="icon"
-      variant="ghost"
-      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      title={`Switch to ${isDark ? "light" : "dark"} mode`}
-      onClick={() =>
-        setTheme(isDark ? "light" : "dark")
-      }
+    <form
+      onSubmit={handleSubmit}
+      className="flex w-full flex-col gap-3 sm:flex-row"
     >
-      {isDark ? (
-        <Sun className="size-5 transition-transform duration-200" />
-      ) : (
-        <Moon className="size-5 transition-transform duration-200" />
-      )}
-    </Button>
+      <div className="relative flex-1">
+        <MapPin className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted-foreground" />
+
+        <Input
+          value={city}
+          onChange={(event) =>
+            setCity(event.target.value)
+          }
+          placeholder="Search city..."
+          className="h-12 rounded-xl pl-12"
+          autoComplete="off"
+          spellCheck={false}
+        />
+      </div>
+
+      <Button
+        type="submit"
+        disabled={isPending}
+        className="h-12 rounded-xl px-6"
+      >
+        {isPending ? (
+          <>
+            <Loader2 className="mr-2 size-4 animate-spin" />
+            Searching...
+          </>
+        ) : (
+          <>
+            <Search className="mr-2 size-4" />
+            Search
+          </>
+        )}
+      </Button>
+    </form>
   );
 }

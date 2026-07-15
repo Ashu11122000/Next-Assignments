@@ -8,14 +8,6 @@
  * API:
  * https://api.weatherapi.com/v1/forecast.json
  *
- * Covers:
- * - Location
- * - Current Weather
- * - Condition
- * - Forecast
- * - Forecast Day
- * - Astro
- * - Hourly Forecast
  * ============================================================================
  */
 
@@ -79,10 +71,12 @@ export interface Astro {
   moonrise: string;
   moonset: string;
   moon_phase: string;
-  moon_illumination: string;
+  moon_illumination: string | number;
+  is_moon_up?: number;
+  is_sun_up?: number;
 }
 
-export interface HourForecast {
+export interface Hour {
   time_epoch: number;
   time: string;
 
@@ -93,7 +87,9 @@ export interface HourForecast {
 
   condition: Condition;
 
+  wind_mph: number;
   wind_kph: number;
+
   wind_degree: number;
   wind_dir: string;
 
@@ -105,10 +101,10 @@ export interface HourForecast {
   cloud: number;
 
   feelslike_c: number;
+  feelslike_f: number;
 
   windchill_c: number;
   heatindex_c: number;
-
   dewpoint_c: number;
 
   will_it_rain: number;
@@ -118,6 +114,8 @@ export interface HourForecast {
   chance_of_snow: number;
 
   vis_km: number;
+
+  gust_kph: number;
 
   uv: number;
 }
@@ -135,6 +133,8 @@ export interface ForecastDay {
 
     totalprecip_mm: number;
 
+    avgvis_km: number;
+
     avghumidity: number;
 
     daily_will_it_rain: number;
@@ -150,23 +150,17 @@ export interface ForecastDay {
 
   astro: Astro;
 
-  hour: HourForecast[];
+  hour: Hour[];
 }
 
 export interface Forecast {
   forecastday: ForecastDay[];
 }
 
-export interface WeatherResponse {
-  location: Location;
-  current: CurrentWeather;
-  forecast: Forecast;
-}
-
 export interface Alert {
   headline: string;
   msgtype: string;
-  severity: string;
+ severity: string;
   urgency: string;
   areas: string;
   category: string;
