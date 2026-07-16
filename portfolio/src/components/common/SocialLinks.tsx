@@ -1,36 +1,50 @@
 "use client";
 
 /* =============================================================================
-   Portfolio UI Library
-   -----------------------------------------------------------------------------
+   Portfolio Website
+   =============================================================================
    File: src/components/common/SocialLinks.tsx
+   -----------------------------------------------------------------------------
+   Reusable Social Links
+   -----------------------------------------------------------------------------
 
-   Production-ready reusable Social Links component.
+   Responsibilities
+   ----------------
+   • Render reusable social profile links.
+   • Support icon-only and labeled layouts.
+   • Reuse the shared Button component.
+   • Provide accessible external links.
+   • Remain responsive and configurable.
 
    Features
-   -----------------------------------------------------------------------------
+   --------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ Responsive
+   ✓ CVA Variants
    ✓ Accessible
-   ✓ Uses reusable Button component
-   ✓ Multiple variants
-   ✓ Multiple sizes
-   ✓ External link security
+   ✓ Responsive
+   ✓ react-icons (Brand Icons)
+   ✓ Lucide React (UI Icons)
+   ✓ Production Ready
+
 ============================================================================= */
 
 import * as React from "react";
 import Link from "next/link";
+
 import { cva, type VariantProps } from "class-variance-authority";
 import { Mail } from "lucide-react";
-import { SiGithub } from "react-icons/si";
-import { FaLinkedin } from "react-icons/fa";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
-const socialLinksVariants = cva("flex items-center", {
+/* =============================================================================
+   Variants
+============================================================================= */
+
+const socialLinksVariants = cva("flex", {
   variants: {
     direction: {
       row: "flex-row",
@@ -57,31 +71,51 @@ const socialLinksVariants = cva("flex items-center", {
   },
 });
 
+/* =============================================================================
+   Types
+============================================================================= */
+
 export interface SocialLink {
-  label: string;
-  href: string;
-  icon: React.ReactNode;
+  readonly label: string;
+  readonly href: string;
+  readonly icon: React.ReactNode;
 }
 
 export interface SocialLinksProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof socialLinksVariants> {
-  links?: SocialLink[];
+  /**
+   * Override default links.
+   */
+  links?: readonly SocialLink[];
 
-  iconOnly?: boolean;
+  /**
+   * Show text labels beside icons.
+   *
+   * true  → GitHub
+   * false → icon only
+   */
+  showLabel?: boolean;
 
+  /**
+   * Button variant.
+   */
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
 }
 
-const defaultLinks: SocialLink[] = [
+/* =============================================================================
+   Default Links
+============================================================================= */
+
+const DEFAULT_LINKS: readonly SocialLink[] = [
   {
     label: "GitHub",
     href: "https://github.com/Ashu11122000",
-    icon: <SiGithub className="h-5 w-5" />,
+    icon: <FaGithub className="h-5 w-5" />,
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/ashish-sharma-383439191",
+    href: "https://www.linkedin.com/in/ashish-sharma-383439191/",
     icon: <FaLinkedin className="h-5 w-5" />,
   },
   {
@@ -91,13 +125,17 @@ const defaultLinks: SocialLink[] = [
   },
 ];
 
-export function SocialLinks({
+/* =============================================================================
+   Component
+============================================================================= */
+
+export default function SocialLinks({
   className,
   direction,
   gap,
   alignment,
-  links = defaultLinks,
-  iconOnly = true,
+  links = DEFAULT_LINKS,
+  showLabel = false,
   buttonVariant = "ghost",
   ...props
 }: SocialLinksProps) {
@@ -118,17 +156,23 @@ export function SocialLinks({
           key={link.label}
           asChild
           variant={buttonVariant}
-          size={iconOnly ? "icon" : "md"}
+          size={showLabel ? "md" : "icon"}
           aria-label={link.label}
+          title={link.label}
         >
           <Link
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={link.label}
           >
             {link.icon}
 
-            {!iconOnly && <span>{link.label}</span>}
+            {showLabel && (
+              <span className="ml-2">
+                {link.label}
+              </span>
+            )}
           </Link>
         </Button>
       ))}
