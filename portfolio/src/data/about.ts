@@ -136,3 +136,22 @@ export const ABOUT_HIGHLIGHTS: readonly AboutHighlight[] = [
     icon: HeartHandshake,
   },
 ] as const;
+
+export const ABOUT_STATS = [
+  {
+    label: "Experience",
+    value: "10 Months",
+  },
+  {
+    label: "Projects",
+    value: "10+",
+  },
+  {
+    label: "Technologies",
+    value: "20+",
+  },
+  {
+    label: "Current Role",
+    value: "Software Analyst Intern",
+  },
+] as const;
