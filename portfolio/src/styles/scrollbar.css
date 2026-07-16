@@ -1,0 +1,135 @@
+/* =============================================================================
+   Portfolio Design System
+   File: src/styles/scrollbar.css
+   -----------------------------------------------------------------------------
+   Custom Scrollbar
+   -----------------------------------------------------------------------------
+   Premium scrollbar styling for Chromium, Edge, Safari, and Firefox.
+   The design follows the portfolio's glassmorphism and cyan/violet
+   accent color palette.
+   ============================================================================= */
+
+/* =============================================================================
+   Firefox
+   ============================================================================= */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) transparent;
+}
+
+/* =============================================================================
+   WebKit Browsers
+   ============================================================================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    var(--primary),
+    var(--secondary),
+    var(--accent)
+  );
+
+  border-radius: var(--radius-full);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+
+  transition:
+    background var(--duration-normal) var(--ease-smooth),
+    box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow:
+    0 0 12px rgba(6, 182, 212, 0.35),
+    0 0 24px rgba(139, 92, 246, 0.20);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(
+    180deg,
+    var(--primary-hover),
+    var(--secondary-hover),
+    var(--accent-hover)
+  );
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* =============================================================================
+   Utility
+   ============================================================================= */
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* =============================================================================
+   Thin Scrollbar
+   ============================================================================= */
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border: none;
+  border-radius: var(--radius-full);
+
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* =============================================================================
+   Glass Scrollbar
+   ============================================================================= */
+
+.scrollbar-glass::-webkit-scrollbar-thumb {
+  background: var(--glass);
+
+  backdrop-filter: blur(var(--blur-md));
+
+  border: 1px solid var(--glass-border);
+}
+
+.scrollbar-glass::-webkit-scrollbar-thumb:hover {
+  background: var(--glass-strong);
+}
+
+/* =============================================================================
+   Smooth Scrolling
+   ============================================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
