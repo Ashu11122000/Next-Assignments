@@ -5,25 +5,18 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/SectionHeading.tsx
 
-   Production-ready reusable Section Heading component.
+   Ultra Premium reusable Section Heading component.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ Slot + Slottable support
-   ✓ asChild support
-   ✓ CVA variants
-   ✓ Badge support
-   ✓ Title
-   ✓ Description
-   ✓ Left / Center / Right alignment
-   ✓ Gradient title
-   ✓ Divider support
-   ✓ Fully responsive
+   ✓ CVA
+   ✓ Premium Typography
+   ✓ Glass Badge
+   ✓ Responsive
    ✓ Accessible
-   ✓ ForwardRef
 ============================================================================= */
 
 import * as React from "react";
@@ -34,38 +27,57 @@ import { Badge } from "@/components/ui/Badge";
 import { Divider } from "@/components/ui/Divider";
 import { cn } from "@/lib/utils";
 
-const sectionHeadingVariants = cva("w-full", {
-  variants: {
-    align: {
-      left: "text-left items-start",
-      center: "text-center items-center",
-      right: "text-right items-end",
+const sectionHeadingVariants = cva(
+  [
+    "relative",
+    "flex",
+    "w-full",
+    "flex-col",
+  ].join(" "),
+  {
+    variants: {
+      align: {
+        left: "items-start text-left",
+
+        center: "items-center text-center",
+
+        right: "items-end text-right",
+      },
+
+      spacing: {
+        sm: "gap-3",
+
+        md: "gap-5",
+
+        lg: "gap-7",
+      },
+
+      maxWidth: {
+        sm: "max-w-xl",
+
+        md: "max-w-2xl",
+
+        lg: "max-w-3xl",
+
+        xl: "max-w-4xl",
+
+        full: "max-w-full",
+      },
     },
 
-    spacing: {
-      sm: "gap-2",
-      md: "gap-4",
-      lg: "gap-6",
+    defaultVariants: {
+      align: "center",
+      spacing: "lg",
+      maxWidth: "lg",
     },
-
-    maxWidth: {
-      sm: "max-w-xl",
-      md: "max-w-2xl",
-      lg: "max-w-3xl",
-      xl: "max-w-4xl",
-      full: "max-w-full",
-    },
-  },
-
-  defaultVariants: {
-    align: "center",
-    spacing: "md",
-    maxWidth: "lg",
-  },
-});
+  }
+);
 
 export interface SectionHeadingProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "title">,
+  extends Omit<
+      React.HTMLAttributes<HTMLDivElement>,
+      "title"
+    >,
     VariantProps<typeof sectionHeadingVariants> {
   asChild?: boolean;
 
@@ -107,7 +119,6 @@ const SectionHeading = React.forwardRef<
       <Comp
         ref={ref}
         className={cn(
-          "flex flex-col",
           sectionHeadingVariants({
             align,
             spacing,
@@ -119,8 +130,9 @@ const SectionHeading = React.forwardRef<
       >
         {badge && (
           <Badge
-            variant="gradient"
+            variant="glass"
             size="sm"
+            className="mb-1"
           >
             {badge}
           </Badge>
@@ -128,16 +140,64 @@ const SectionHeading = React.forwardRef<
 
         <h2
           className={cn(
-            "heading-xl font-bold text-balance",
-            gradient &&
-              "bg-linear-to-r from-cyan-400 via-blue-400 to-violet-500 bg-clip-text text-transparent"
+            [
+              "text-3xl",
+              "font-bold",
+              "leading-tight",
+              "tracking-tight",
+              "text-balance",
+
+              "sm:text-4xl",
+
+              "lg:text-5xl",
+            ].join(" "),
+
+            gradient
+              ? [
+                  "bg-gradient-to-r",
+
+                  "from-cyan-300",
+
+                  "via-blue-400",
+
+                  "to-violet-400",
+
+                  "bg-clip-text",
+
+                  "text-transparent",
+                ].join(" ")
+              : "text-white"
           )}
         >
           {title}
         </h2>
 
         {description && (
-          <p className="body-lg max-w-3xl text-slate-400 text-balance">
+          <p
+            className={cn(
+              [
+                "max-w-3xl",
+
+                "text-base",
+
+                "leading-8",
+
+                "text-slate-400",
+
+                "text-pretty",
+
+                "sm:text-lg",
+
+                "lg:text-xl",
+              ].join(" "),
+
+              align === "left" && "mx-0",
+
+              align === "center" && "mx-auto",
+
+              align === "right" && "ml-auto"
+            )}
+          >
             {description}
           </p>
         )}
@@ -145,7 +205,16 @@ const SectionHeading = React.forwardRef<
         {divider && (
           <Divider
             variant="gradient"
-            className="max-w-32"
+            spacing="none"
+            className={cn(
+              "mt-2",
+
+              align === "center" && "w-28",
+
+              align === "left" && "w-28",
+
+              align === "right" && "ml-auto w-28"
+            )}
           />
         )}
 

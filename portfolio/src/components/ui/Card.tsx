@@ -5,20 +5,19 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/Card.tsx
 
-   A production-ready reusable Card component.
+   Ultra Premium reusable Card component.
 
    Features
    -----------------------------------------------------------------------------
-   ✓ Slot + Slottable support
-   ✓ asChild support
-   ✓ Multiple variants
-   ✓ Padding variants
-   ✓ Radius variants
-   ✓ Hover animation
-   ✓ Glass effect
+   ✓ React 19
+   ✓ Next.js 16
+   ✓ TypeScript
    ✓ CVA
-   ✓ ForwardRef
-   ✓ Fully typed
+   ✓ Glassmorphism
+   ✓ Gradient Overlay
+   ✓ Premium Hover
+   ✓ Inner Highlight
+   ✓ Accessible
 ============================================================================= */
 
 import * as React from "react";
@@ -29,72 +28,102 @@ import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
   [
+    "group",
     "relative",
+
     "overflow-hidden",
-    "transition-all",
-    "duration-300",
-    "ease-out",
+
     "border",
-    "backdrop-blur-xl",
+
+    "backdrop-blur-2xl",
+
+    "transition-all",
+
+    "duration-500",
+
+    "ease-out",
+
+    "isolate",
   ].join(" "),
   {
     variants: {
       variant: {
         default: [
-          "bg-slate-900/70",
           "border-white/10",
-          "shadow-lg",
+
+          "bg-slate-900/75",
+
+          "shadow-[0_20px_60px_rgba(0,0,0,.30)]",
         ].join(" "),
 
         glass: [
-          "bg-white/5",
-          "backdrop-blur-2xl",
           "border-white/10",
-          "shadow-xl",
+
+          "bg-white/[0.05]",
+
+          "backdrop-blur-3xl",
+
+          "shadow-[0_20px_60px_rgba(15,23,42,.35)]",
         ].join(" "),
 
         elevated: [
+          "border-slate-700/70",
+
           "bg-slate-900",
-          "border-slate-800",
-          "shadow-2xl",
+
+          "shadow-[0_30px_80px_rgba(0,0,0,.40)]",
         ].join(" "),
 
         outline: [
-          "bg-transparent",
           "border-white/15",
+
+          "bg-transparent",
         ].join(" "),
       },
 
       padding: {
-        none: "p-0",
+  none: "p-0",
 
-        sm: "p-4",
+  sm: "p-6",
 
-        md: "p-6",
+  md: "p-8",
 
-        lg: "p-8",
+  lg: "p-10",
 
-        xl: "p-10",
-      },
+  xl: "p-12",
+},
+
+height: {
+  auto: "",
+
+  sm: "min-h-[220px]",
+
+  md: "min-h-[300px]",
+
+  lg: "min-h-[380px]",
+
+  xl: "min-h-[460px]",
+},
 
       radius: {
         none: "rounded-none",
 
-        sm: "rounded-lg",
+        sm: "rounded-xl",
 
-        md: "rounded-xl",
+        md: "rounded-2xl",
 
-        lg: "rounded-2xl",
+        lg: "rounded-3xl",
 
-        xl: "rounded-3xl",
+        xl: "rounded-[2rem]",
       },
 
       hover: {
         true: [
-          "hover:-translate-y-1",
-          "hover:border-cyan-500/30",
-          "hover:shadow-cyan-500/10",
-          "hover:shadow-2xl",
+          "hover:-translate-y-2",
+
+          "hover:border-violet-400/30",
+
+          "hover:shadow-[0_35px_80px_rgba(99,102,241,.18)]",
         ].join(" "),
 
         false: "",
@@ -146,7 +175,99 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
         )}
         {...props}
       >
-        <Slottable>{children}</Slottable>
+        {/* Premium Top Highlight */}
+        <div
+          aria-hidden
+          className="
+            pointer-events-none
+            absolute
+            inset-x-0
+            top-0
+            h-px
+            bg-gradient-to-r
+            from-transparent
+            via-white/30
+            to-transparent
+          "
+        />
+
+        {/* Glass Gradient */}
+        <div
+          aria-hidden
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+            opacity-60
+            bg-gradient-to-br
+            from-white/[0.06]
+            via-transparent
+            to-violet-500/[0.03]
+          "
+        />
+
+        {/* Glow */}
+        <div
+          aria-hidden
+          className="
+            pointer-events-none
+            absolute
+            -top-24
+            right-0
+            h-44
+            w-44
+            rounded-full
+            bg-violet-500/10
+            blur-3xl
+            transition-opacity
+            duration-500
+            group-hover:opacity-100
+            opacity-0
+          "
+        />
+
+        {/* Bottom Glow */}
+        <div
+          aria-hidden
+          className="
+            pointer-events-none
+            absolute
+            -bottom-20
+            -left-16
+            h-40
+            w-40
+            rounded-full
+            bg-cyan-400/10
+            blur-3xl
+            transition-opacity
+            duration-500
+            group-hover:opacity-100
+            opacity-0
+          "
+        />
+
+        {/* Content */}
+        {/* ========================================================= */}
+{/* Content */}
+{/* ========================================================= */}
+
+<div
+  className="
+    relative
+    z-10
+
+    flex
+    h-full
+    min-h-full
+    flex-col
+
+    justify-between
+
+    gap-6
+  "
+>
+  <Slottable>{children}</Slottable>
+</div>
       </Comp>
     );
   }

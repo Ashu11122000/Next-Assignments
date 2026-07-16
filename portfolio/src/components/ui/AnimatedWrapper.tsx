@@ -16,7 +16,8 @@
    ✓ Slot + Slottable
    ✓ asChild support
    ✓ ForwardRef
-   ✓ Multiple animation presets
+   ✓ Premium spring animations
+   ✓ GPU Optimized
 ============================================================================= */
 
 import * as React from "react";
@@ -28,6 +29,8 @@ import {
 } from "framer-motion";
 
 import { cn } from "@/lib/utils";
+
+const DISTANCE = 28;
 
 const animationVariants: Record<string, Variants> = {
   fade: {
@@ -42,7 +45,7 @@ const animationVariants: Record<string, Variants> = {
   fadeUp: {
     hidden: {
       opacity: 0,
-      y: 40,
+      y: DISTANCE,
     },
     visible: {
       opacity: 1,
@@ -53,7 +56,7 @@ const animationVariants: Record<string, Variants> = {
   fadeDown: {
     hidden: {
       opacity: 0,
-      y: -40,
+      y: -DISTANCE,
     },
     visible: {
       opacity: 1,
@@ -64,7 +67,7 @@ const animationVariants: Record<string, Variants> = {
   fadeLeft: {
     hidden: {
       opacity: 0,
-      x: -40,
+      x: -DISTANCE,
     },
     visible: {
       opacity: 1,
@@ -75,7 +78,7 @@ const animationVariants: Record<string, Variants> = {
   fadeRight: {
     hidden: {
       opacity: 0,
-      x: 40,
+      x: DISTANCE,
     },
     visible: {
       opacity: 1,
@@ -86,7 +89,7 @@ const animationVariants: Record<string, Variants> = {
   scale: {
     hidden: {
       opacity: 0,
-      scale: 0.9,
+      scale: 0.96,
     },
     visible: {
       opacity: 1,
@@ -97,7 +100,7 @@ const animationVariants: Record<string, Variants> = {
   zoom: {
     hidden: {
       opacity: 0,
-      scale: 0.8,
+      scale: 0.92,
     },
     visible: {
       opacity: 1,
@@ -108,20 +111,19 @@ const animationVariants: Record<string, Variants> = {
   rotate: {
     hidden: {
       opacity: 0,
-      rotate: -8,
+      rotate: -4,
+      scale: 0.98,
     },
     visible: {
       opacity: 1,
       rotate: 0,
+      scale: 1,
     },
   },
 };
 
 export interface AnimatedWrapperProps
-  extends Omit<
-    HTMLMotionProps<"div">,
-    "variants"
-  > {
+  extends Omit<HTMLMotionProps<"div">, "variants"> {
   asChild?: boolean;
 
   animation?:
@@ -150,7 +152,7 @@ const AnimatedWrapper = React.forwardRef<
       className,
       animation = "fadeUp",
       delay = 0,
-      duration = 0.5,
+      duration = 0.7,
       once = true,
       asChild = false,
       children,
@@ -160,10 +162,7 @@ const AnimatedWrapper = React.forwardRef<
   ) => {
     if (asChild) {
       return (
-        <Slot
-          ref={ref}
-          className={className}
-        >
+        <Slot ref={ref} className={className}>
           <Slottable>{children as React.ReactNode}</Slottable>
         </Slot>
       );
@@ -178,11 +177,19 @@ const AnimatedWrapper = React.forwardRef<
         whileInView="visible"
         viewport={{
           once,
-          amount: 0.2,
+          amount: 0.15,
+          margin: "-60px",
         }}
         transition={{
           duration,
           delay,
+          type: "spring",
+          stiffness: 85,
+          damping: 18,
+          mass: 0.8,
+        }}
+        style={{
+          willChange: "transform, opacity",
         }}
         {...props}
       >

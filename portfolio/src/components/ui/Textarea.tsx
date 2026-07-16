@@ -5,19 +5,18 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/Textarea.tsx
 
-   Production-ready reusable Textarea component.
+   Ultra Premium reusable Textarea component.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ CVA Variants
-   ✓ Multiple sizes
-   ✓ Error & Success states
+   ✓ CVA
+   ✓ Glassmorphism
+   ✓ Premium Focus
    ✓ Accessible
-   ✓ React Hook Form friendly
-   ✓ ForwardRef
+   ✓ React Hook Form Friendly
 ============================================================================= */
 
 import * as React from "react";
@@ -27,55 +26,93 @@ import { cn } from "@/lib/utils";
 
 const textareaVariants = cva(
   [
-    "flex",
     "w-full",
-    "rounded-xl",
+
+    "rounded-2xl",
+
     "border",
-    "bg-slate-900/60",
+
+    "bg-slate-900/70",
+
     "text-slate-100",
+
     "placeholder:text-slate-500",
-    "backdrop-blur-xl",
+
+    "backdrop-blur-2xl",
+
+    "shadow-[0_10px_30px_rgba(15,23,42,.18)]",
+
     "transition-all",
     "duration-300",
+    "ease-out",
+
     "outline-none",
+
     "resize-y",
+
+    "leading-7",
+
     "disabled:cursor-not-allowed",
     "disabled:opacity-50",
+
+    "focus-visible:-translate-y-0.5",
+
+    "focus-visible:border-violet-400/40",
+
     "focus-visible:ring-2",
-    "focus-visible:ring-cyan-500/30",
-    "focus-visible:border-cyan-500/40",
+
+    "focus-visible:ring-violet-500/25",
+
+    "focus-visible:shadow-[0_18px_45px_rgba(99,102,241,.18)]",
   ].join(" "),
   {
     variants: {
       variant: {
-        default: "border-white/10",
+        default: [
+          "border-white/10",
+          "bg-slate-900/70",
+        ].join(" "),
 
-        glass:
-          "border-white/10 bg-white/5 backdrop-blur-2xl",
+        glass: [
+          "border-white/10",
+          "bg-white/[0.05]",
+          "backdrop-blur-3xl",
+          "shadow-[inset_0_1px_0_rgba(255,255,255,.05)]",
+        ].join(" "),
 
-        outline:
-          "border-white/20 bg-transparent",
+        outline: [
+          "border-white/15",
+          "bg-transparent",
+        ].join(" "),
 
-        filled:
-          "border-transparent bg-slate-800",
+        filled: [
+          "border-transparent",
+          "bg-slate-800/90",
+        ].join(" "),
       },
 
       size: {
-        sm: "min-h-24 px-3 py-2 text-sm",
+        sm: "min-h-24 px-4 py-3 text-sm",
 
-        md: "min-h-32 px-4 py-3 text-base",
+        md: "min-h-36 px-5 py-4 text-base",
 
-        lg: "min-h-40 px-5 py-4 text-lg",
+        lg: "min-h-48 px-6 py-5 text-lg",
       },
 
       state: {
         default: "",
 
-        error:
-          "border-red-500 focus-visible:ring-red-500/25",
+        error: [
+          "border-red-500/50",
+          "focus-visible:border-red-500",
+          "focus-visible:ring-red-500/25",
+        ].join(" "),
 
-        success:
-          "border-emerald-500 focus-visible:ring-emerald-500/25",
+        success: [
+          "border-emerald-500/50",
+          "focus-visible:border-emerald-500",
+          "focus-visible:ring-emerald-500/25",
+        ].join(" "),
       },
 
       resize: {
@@ -118,19 +155,38 @@ const Textarea = React.forwardRef<
     ref
   ) => {
     return (
-      <textarea
-        ref={ref}
-        className={cn(
-          textareaVariants({
-            variant,
-            size,
-            state,
-            resize,
-          }),
-          className
-        )}
-        {...props}
-      />
+      <div className="group relative w-full">
+        {/* Glass Highlight */}
+        <div
+          aria-hidden
+          className="
+            pointer-events-none
+            absolute
+            inset-0
+            rounded-2xl
+            bg-gradient-to-br
+            from-white/[0.05]
+            via-transparent
+            to-transparent
+          "
+        />
+
+        <textarea
+          ref={ref}
+          className={cn(
+            textareaVariants({
+              variant,
+              size,
+              state,
+              resize,
+            }),
+            "relative z-10",
+            "scrollbar-thin",
+            className
+          )}
+          {...props}
+        />
+      </div>
     );
   }
 );

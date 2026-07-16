@@ -5,18 +5,17 @@
    -----------------------------------------------------------------------------
    File: src/components/common/BackToTop.tsx
 
-   Production-ready Back To Top button.
+   Ultra Premium Back To Top Button.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ Framer Motion
-   ✓ Scroll threshold
-   ✓ Smooth scroll
+   ✓ Premium Glass UI
+   ✓ Spring Animation
+   ✓ Mobile Responsive
    ✓ Accessible
-   ✓ GPU accelerated
-   ✓ Auto hide/show
 ============================================================================= */
 
 import * as React from "react";
@@ -59,8 +58,8 @@ export default function BackToTop() {
         <motion.div
           initial={{
             opacity: 0,
-            scale: 0.8,
-            y: 20,
+            scale: 0.85,
+            y: 32,
           }}
           animate={{
             opacity: 1,
@@ -69,25 +68,99 @@ export default function BackToTop() {
           }}
           exit={{
             opacity: 0,
-            scale: 0.8,
-            y: 20,
+            scale: 0.9,
+            y: 24,
           }}
           transition={{
-            duration: 0.25,
-            ease: "easeOut",
+            type: "spring",
+            stiffness: 180,
+            damping: 18,
           }}
-          className="fixed bottom-6 right-6 z-50"
+          className="
+            fixed
+            bottom-5
+            right-5
+            z-[100]
+
+            sm:bottom-6
+            sm:right-6
+
+            lg:bottom-8
+            lg:right-8
+          "
+          style={{
+            willChange: "transform",
+          }}
         >
-          <Button
-            type="button"
-            variant="gradient"
-            size="icon"
-            aria-label="Back to top"
-            onClick={scrollToTop}
-            className="shadow-xl shadow-cyan-500/20"
+          <motion.div
+            whileHover={{
+              y: -4,
+              scale: 1.05,
+            }}
+            whileTap={{
+              scale: 0.96,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            className="relative"
           >
-            <HiArrowUp className="h-5 w-5" />
-          </Button>
+            {/* Ambient Glow */}
+            <div
+              aria-hidden
+              className="
+                absolute
+                inset-0
+
+                rounded-2xl
+
+                bg-cyan-400/20
+
+                blur-xl
+
+                animate-pulse
+              "
+            />
+
+            <Button
+              type="button"
+              variant="gradient"
+              size="icon"
+              aria-label="Back to top"
+              onClick={scrollToTop}
+              className="
+                relative
+
+                h-12
+                w-12
+
+                rounded-2xl
+
+                border
+                border-white/10
+
+                bg-white/[0.06]
+
+                backdrop-blur-2xl
+
+                shadow-[0_20px_50px_rgba(59,130,246,.35)]
+
+                sm:h-13
+                sm:w-13
+              "
+            >
+              <motion.div
+                whileHover={{
+                  y: -1,
+                }}
+                transition={{
+                  duration: 0.15,
+                }}
+              >
+                <HiArrowUp className="h-5 w-5" />
+              </motion.div>
+            </Button>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -5,7 +5,7 @@
    -----------------------------------------------------------------------------
    File: src/components/common/TechBadge.tsx
 
-   Production-ready reusable Tech Badge component.
+   Ultra Premium reusable Tech Badge component.
 
    Features
    -----------------------------------------------------------------------------
@@ -13,9 +13,9 @@
    ✓ Next.js 16
    ✓ TypeScript
    ✓ Uses reusable Badge component
-   ✓ react-icons integration
+   ✓ Premium Glass UI
+   ✓ Responsive
    ✓ Accessible
-   ✓ Fully reusable
 ============================================================================= */
 
 import * as React from "react";
@@ -48,19 +48,42 @@ import { Code2 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 
-const techBadgeVariants = cva("", {
-  variants: {
-    size: {
-      sm: "",
-      md: "",
-      lg: "",
-    },
-  },
+/* =============================================================================
+   Variants
+============================================================================= */
 
-  defaultVariants: {
-    size: "md",
-  },
-});
+const techBadgeVariants = cva(
+  [
+    "transition-all",
+    "duration-300",
+    "ease-out",
+
+    "hover:-translate-y-0.5",
+
+    "hover:scale-[1.03]",
+
+    "cursor-default",
+  ].join(" "),
+  {
+    variants: {
+      size: {
+        sm: "",
+
+        md: "",
+
+        lg: "",
+      },
+    },
+
+    defaultVariants: {
+      size: "md",
+    },
+  }
+);
+
+/* =============================================================================
+   Icons
+============================================================================= */
 
 const techIcons = {
   "Next.js": SiNextdotjs,
@@ -89,9 +112,15 @@ export type Technology = keyof typeof techIcons;
 
 const iconSizeMap = {
   sm: "h-3.5 w-3.5",
+
   md: "h-4 w-4",
+
   lg: "h-5 w-5",
 } as const;
+
+/* =============================================================================
+   Props
+============================================================================= */
 
 export interface TechBadgeProps
   extends VariantProps<typeof techBadgeVariants> {
@@ -105,6 +134,10 @@ export interface TechBadgeProps
 
   radius?: React.ComponentProps<typeof Badge>["radius"];
 }
+
+/* =============================================================================
+   Component
+============================================================================= */
 
 export function TechBadge({
   technology,
@@ -128,19 +161,62 @@ export function TechBadge({
       variant={variant}
       size={badgeSize}
       radius={radius}
-      className={cn(variantClass, className)}
+      className={cn(
+        "group",
+
+        "gap-2.5",
+
+        "font-medium",
+
+        "tracking-wide",
+
+        "backdrop-blur-2xl",
+
+        "border-white/10",
+
+        "shadow-[0_10px_30px_rgba(15,23,42,.16)]",
+
+        "hover:border-cyan-400/25",
+
+        "hover:shadow-[0_16px_40px_rgba(59,130,246,.18)]",
+
+        variantClass,
+
+        className
+      )}
     >
       {showIcon && (
-        <Icon
-          aria-hidden="true"
-          className={cn(
-            "shrink-0",
-            iconSizeMap[badgeSize]
-          )}
-        />
+        <span
+          className="
+            flex
+
+            items-center
+
+            justify-center
+
+            transition-transform
+
+            duration-300
+
+            group-hover:scale-110
+
+            group-hover:-translate-y-0.5
+          "
+        >
+          <Icon
+            aria-hidden="true"
+            className={cn(
+              "shrink-0",
+
+              iconSizeMap[badgeSize]
+            )}
+          />
+        </span>
       )}
 
-      <span>{technology}</span>
+      <span className="whitespace-nowrap">
+        {technology}
+      </span>
     </Badge>
   );
 }

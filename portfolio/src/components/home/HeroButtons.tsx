@@ -7,17 +7,13 @@
  * Hero CTA Buttons
  * -----------------------------------------------------------------------------
  *
- * Responsibilities
- * ----------------
- * • Render the primary call-to-action buttons for the Hero section.
- * • Consume static button data from src/data/hero.ts.
- * • Keep HeroContent focused only on layout and typography.
- * • Support internal and external navigation.
- *
- * Rendering
- * ---------
- * • Server Component
- * • Static Rendering
+ * Ultra Premium UI
+ * -----------------------------------------------------------------------------
+ * • Premium CTA Buttons
+ * • Better Responsive Layout
+ * • Smooth Hover Effects
+ * • Dashboard Style
+ * • No Business Logic Changes
  *
  * =============================================================================
  */
@@ -29,9 +25,21 @@ import { HERO_BUTTONS } from "@/data/hero";
 
 export default function HeroButtons() {
   return (
-    <div className="flex flex-col gap-4 pt-8 sm:flex-row sm:items-center">
+    <div
+      className="
+        flex
+        flex-col
+        gap-4
+        pt-10
+        sm:flex-row
+        sm:flex-wrap
+        sm:items-center
+      "
+    >
       {HERO_BUTTONS.map((button) => {
         const Icon = button.icon;
+
+        const isPrimary = button.variant === "gradient";
 
         return (
           <Button
@@ -40,7 +48,36 @@ export default function HeroButtons() {
             variant={button.variant}
             size="lg"
             rightIcon={<Icon className="h-4 w-4" />}
-            className="min-w-[190px]"
+            className={`
+              h-14
+              w-full
+              sm:w-auto
+              sm:min-w-[220px]
+              rounded-2xl
+              px-8
+              text-sm
+              font-semibold
+              transition-all
+              duration-300
+              ${
+                isPrimary
+                  ? `
+                    shadow-xl
+                    shadow-cyan-500/20
+                    hover:-translate-y-1
+                    hover:shadow-cyan-500/30
+                  `
+                  : `
+                    border
+                    border-white/10
+                    bg-white/5
+                    backdrop-blur-xl
+                    hover:-translate-y-1
+                    hover:border-cyan-400/30
+                    hover:bg-white/10
+                  `
+              }
+            `}
           >
             <Link
               href={button.href}
