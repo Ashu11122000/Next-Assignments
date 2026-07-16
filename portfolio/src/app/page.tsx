@@ -10,75 +10,84 @@
  * Responsibilities
  * ----------------
  * • Render the complete portfolio homepage.
- * • Assemble all reusable homepage sections.
- * • Keep the page lightweight and server-rendered.
- * • Provide a responsive dashboard-style layout.
+ * • Assemble reusable landing page sections.
+ * • Keep the page server-rendered.
+ * • Maintain a premium single-page scrolling experience.
  *
  * Rendering
  * ---------
  * • Server Component
  * • Static Rendering
  *
- * Sections
- * --------
- * • Hero
- * • About
- * • Skills
- * • Experience
- * • Featured Projects
- * • Education
- * • Contact
- *
  * =============================================================================
  */
 
-import AboutCard from "@/components/home/AboutCard";
-import ContactCard from "@/components/home/ContactCard";
-import EducationTimeline from "@/components/home/EducationTimeline";
-import ExperienceCard from "@/components/home/ExperienceCard";
-import FeaturedProjects from "@/components/home/FeaturedProjects";
 import Hero from "@/components/home/Hero";
-import SkillsCard from "@/components/home/SkillsCard";
+import AboutCard from "@/components/home/AboutCard";
+import FeaturedProjects from "@/components/home/FeaturedProjects";
+
+import TechStack from "@/components/skills/TechStack";
+import Timeline from "@/components/experience/Timeline";
+import EducationTimeline from "@/components/education/EducationTimeline";
+
+import ContactCard from "@/components/contact/ContactCard";
+import { skills } from "@/data/skills";
 
 export default function Home() {
   return (
-    <main className="relative overflow-hidden">
+    <main className="relative overflow-x-hidden">
       {/* ---------------------------------------------------------------------- */}
-      {/* Hero Section                                                           */}
+      {/* Hero */}
       {/* ---------------------------------------------------------------------- */}
 
       <Hero />
 
       {/* ---------------------------------------------------------------------- */}
-      {/* Main Content                                                           */}
+      {/* About */}
       {/* ---------------------------------------------------------------------- */}
 
-      <section className="mx-auto w-full max-w-7xl px-6 py-16 lg:px-8">
-        <div className="grid gap-8 xl:grid-cols-[1.7fr_1fr]">
-          {/* ================================================================== */}
-          {/* Left Content                                                       */}
-          {/* ================================================================== */}
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <AboutCard />
+      </section>
 
-          <div className="space-y-8">
-            <FeaturedProjects />
+      {/* ---------------------------------------------------------------------- */}
+      {/* Skills */}
+      {/* ---------------------------------------------------------------------- */}
 
-            <EducationTimeline />
-          </div>
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <TechStack categories={skills} />
+      </section>
 
-          {/* ================================================================== */}
-          {/* Right Sidebar                                                      */}
-          {/* ================================================================== */}
+      {/* ---------------------------------------------------------------------- */}
+      {/* Featured Projects */}
+      {/* ---------------------------------------------------------------------- */}
 
-          <aside className="space-y-8">
-            <AboutCard />
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <FeaturedProjects />
+      </section>
 
-            <SkillsCard />
+      {/* ---------------------------------------------------------------------- */}
+      {/* Experience */}
+      {/* ---------------------------------------------------------------------- */}
 
-            <ExperienceCard />
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <Timeline />
+      </section>
 
-            <ContactCard />
-          </aside>
-        </div>
+      {/* ---------------------------------------------------------------------- */}
+      {/* Education */}
+      {/* ---------------------------------------------------------------------- */}
+
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <EducationTimeline />
+      </section>
+
+      {/* ---------------------------------------------------------------------- */}
+      {/* Contact */}
+      {/* ---------------------------------------------------------------------- */}
+
+      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
+        <ContactCard />
       </section>
     </main>
   );
