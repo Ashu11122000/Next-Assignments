@@ -1,26 +1,333 @@
+/* =============================================================================
+   Personal Portfolio
+   File: src/app/globals.css
+   =============================================================================
+
+   Global stylesheet for the application.
+
+   Import Order
+
+   1. Tailwind CSS
+   2. Design Tokens
+   3. Typography
+   4. Animations
+   5. Scrollbar
+   6. Utilities
+
+   ============================================================================= */
+
+/* =============================================================================
+   Tailwind
+   ============================================================================= */
+
 @import "tailwindcss";
 
+/* =============================================================================
+   Design System
+   ============================================================================= */
+
+@import "../styles/variables.css";
+@import "../styles/typography.css";
+@import "../styles/animations.css";
+@import "../styles/scrollbar.css";
+@import "../styles/utilities.css";
+
+/* =============================================================================
+   Theme
+   ============================================================================= */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html.dark {
+  color-scheme: dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.light {
+  color-scheme: light;
+}
+
+/* =============================================================================
+   Base
+   ============================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  font-size: 16px;
+
+  min-height: 100%;
+
+  text-size-adjust: 100%;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  text-rendering: optimizeLegibility;
 }
 
 body {
+  min-height: 100vh;
+
   background: var(--background);
+
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-family:
+    var(--font-geist-sans),
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  line-height: 1.6;
+
+  overflow-x: hidden;
+}
+
+/* =============================================================================
+   Background
+   ============================================================================= */
+
+body::before {
+  position: fixed;
+
+  inset: 0;
+
+  content: "";
+
+  pointer-events: none;
+
+  z-index: -2;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(6, 182, 212, 0.10),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(139, 92, 246, 0.12),
+      transparent 45%
+    ),
+    var(--background);
+}
+
+body::after {
+  position: fixed;
+
+  inset: 0;
+
+  content: "";
+
+  pointer-events: none;
+
+  z-index: -1;
+
+  opacity: .45;
+
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+
+  background-size: 48px 48px;
+}
+
+/* =============================================================================
+   Typography Defaults
+   ============================================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--foreground);
+
+  font-weight: 700;
+
+  line-height: 1.2;
+
+  text-wrap: balance;
+}
+
+p {
+  color: var(--foreground-muted);
+
+  text-wrap: pretty;
+}
+
+small {
+  color: var(--foreground-soft);
+}
+
+/* =============================================================================
+   Links
+   ============================================================================= */
+
+a {
+  color: inherit;
+
+  text-decoration: none;
+
+  transition:
+    color var(--duration-normal) var(--ease-smooth),
+    opacity var(--duration-normal) var(--ease-smooth);
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* =============================================================================
+   Lists
+   ============================================================================= */
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* =============================================================================
+   Media
+   ============================================================================= */
+
+img,
+picture,
+svg,
+video,
+canvas {
+  display: block;
+
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+
+  user-select: none;
+
+  -webkit-user-drag: none;
+}
+
+/* =============================================================================
+   Forms
+   ============================================================================= */
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+
+  color: inherit;
+}
+
+button {
+  background: transparent;
+
+  border: none;
+
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  background: transparent;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* =============================================================================
+   Focus
+   ============================================================================= */
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+
+  outline-offset: 3px;
+}
+
+/* =============================================================================
+   Selection
+   ============================================================================= */
+
+::selection {
+  background: var(--selection-background);
+
+  color: var(--selection-text);
+}
+
+/* =============================================================================
+   Horizontal Rule
+   ============================================================================= */
+
+hr {
+  border: none;
+
+  height: 1px;
+
+  background: var(--border);
+}
+
+/* =============================================================================
+   Code
+   ============================================================================= */
+
+code,
+pre {
+  font-family:
+    var(--font-geist-mono),
+    monospace;
+}
+
+/* =============================================================================
+   Utility Defaults
+   ============================================================================= */
+
+main {
+  position: relative;
+}
+
+section {
+  position: relative;
+}
+
+::placeholder {
+  color: var(--foreground-disabled);
+}
+
+/* =============================================================================
+   Accessibility
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+
+    transition: none !important;
+  }
 }
