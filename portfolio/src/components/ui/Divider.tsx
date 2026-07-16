@@ -5,21 +5,18 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/Divider.tsx
 
-   Production-ready reusable Divider component.
+   Ultra Premium reusable Divider component.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ Slot + Slottable support
-   ✓ asChild support
-   ✓ Horizontal / Vertical
-   ✓ Gradient
-   ✓ Dashed
-   ✓ Label support
+   ✓ Slot + Slottable
    ✓ CVA
-   ✓ ForwardRef
+   ✓ Premium Gradient
+   ✓ Label Support
+   ✓ Glass Styling
 ============================================================================= */
 
 import * as React from "react";
@@ -28,33 +25,42 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-const dividerVariants = cva("shrink-0", {
+const dividerVariants = cva("relative shrink-0", {
   variants: {
     orientation: {
       horizontal: "w-full border-t",
+
       vertical: "h-full border-l",
     },
 
     variant: {
-      solid: "border-white/10",
+      solid: [
+        "border-white/10",
+      ].join(" "),
 
-      dashed: "border-dashed border-white/20",
+      dashed: [
+        "border-dashed",
+        "border-white/15",
+      ].join(" "),
 
       gradient: "border-transparent",
 
-      glow: "border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.35)]",
+      glow: [
+        "border-violet-400/25",
+        "shadow-[0_0_18px_rgba(99,102,241,.22)]",
+      ].join(" "),
     },
 
     spacing: {
       none: "",
 
-      sm: "my-2",
+      sm: "my-3",
 
-      md: "my-4",
+      md: "my-6",
 
-      lg: "my-6",
+      lg: "my-8",
 
-      xl: "my-8",
+      xl: "my-12",
     },
   },
 
@@ -66,8 +72,7 @@ const dividerVariants = cva("shrink-0", {
 });
 
 export interface DividerProps
-  extends
-    React.HTMLAttributes<HTMLDivElement>,
+  extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof dividerVariants> {
   asChild?: boolean;
 
@@ -86,7 +91,7 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
       children,
       ...props
     },
-    ref,
+    ref
   ) => {
     const Comp = asChild ? Slot : "div";
 
@@ -94,13 +99,13 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
       return (
         <div
           className={cn(
-            "flex items-center gap-4",
+            "flex w-full items-center gap-5",
             spacing !== "none" &&
               dividerVariants({
                 spacing,
               })
                 .split(" ")
-                .find(Boolean),
+                .find(Boolean)
           )}
         >
           <div
@@ -111,10 +116,28 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
                 variant,
                 spacing: "none",
               }),
+              variant === "gradient" &&
+                "h-px border-0 bg-gradient-to-r from-transparent via-cyan-400 to-transparent"
             )}
           />
 
-          <span className="text-sm font-medium text-slate-400 whitespace-nowrap">
+          <span
+            className="
+              shrink-0
+              rounded-full
+              border
+              border-white/10
+              bg-white/[0.04]
+              px-4
+              py-1.5
+              text-xs
+              font-semibold
+              uppercase
+              tracking-[0.25em]
+              text-slate-400
+              backdrop-blur-xl
+            "
+          >
             {label}
           </span>
 
@@ -126,6 +149,8 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
                 variant,
                 spacing: "none",
               }),
+              variant === "gradient" &&
+                "h-px border-0 bg-gradient-to-r from-transparent via-violet-400 to-transparent"
             )}
           />
         </div>
@@ -143,19 +168,37 @@ const Divider = React.forwardRef<HTMLDivElement, DividerProps>(
             variant,
             spacing,
           }),
+
           variant === "gradient" &&
-            "bg-linear-to-r from-cyan-500 via-blue-500 to-violet-500 border-0 h-px",
-          orientation === "vertical" &&
-            variant === "gradient" &&
-            "bg-linear-to-b from-cyan-500 via-blue-500 to-violet-500 w-px h-full",
-          className,
+            orientation === "horizontal" &&
+            [
+              "h-px",
+              "border-0",
+              "bg-gradient-to-r",
+              "from-transparent",
+              "via-cyan-400",
+              "to-transparent",
+            ].join(" "),
+
+          variant === "gradient" &&
+            orientation === "vertical" &&
+            [
+              "w-px",
+              "border-0",
+              "bg-gradient-to-b",
+              "from-transparent",
+              "via-cyan-400",
+              "to-transparent",
+            ].join(" "),
+
+          className
         )}
         {...props}
       >
         <Slottable>{children}</Slottable>
       </Comp>
     );
-  },
+  }
 );
 
 Divider.displayName = "Divider";

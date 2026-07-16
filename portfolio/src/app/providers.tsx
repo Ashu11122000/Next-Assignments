@@ -54,17 +54,53 @@ export default function Providers({
 
         <Toaster
           position="top-right"
+          theme="system"
           richColors
           closeButton
           expand
           duration={4000}
           visibleToasts={4}
-          theme="system"
+          gap={12}
+          offset={24}
           toastOptions={{
             classNames: {
-              toast: "glass border border-white/10",
-              title: "font-semibold",
-              description: "text-muted-foreground",
+              toast: `
+                rounded-2xl
+                border
+                border-white/10
+                bg-background/80
+                backdrop-blur-2xl
+                shadow-[0_20px_50px_rgba(0,0,0,0.30)]
+                px-4
+                py-4
+              `,
+              title: `
+                text-sm
+                font-semibold
+                tracking-tight
+              `,
+              description: `
+                mt-1
+                text-sm
+                text-muted-foreground
+              `,
+              actionButton: `
+                rounded-xl
+                bg-primary
+                text-primary-foreground
+                hover:opacity-90
+              `,
+              cancelButton: `
+                rounded-xl
+                bg-secondary
+                text-secondary-foreground
+              `,
+              closeButton: `
+                border
+                border-white/10
+                bg-background/70
+                backdrop-blur-md
+              `,
             },
           }}
         />

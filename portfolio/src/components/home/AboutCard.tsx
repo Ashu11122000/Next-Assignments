@@ -36,30 +36,71 @@ export default function AboutCard() {
       variant="glass"
       padding="lg"
       radius="lg"
-      className="h-full border-white/10"
+      className="
+        group
+        relative
+        h-full
+        overflow-hidden
+        border
+        border-white/10
+        bg-white/[0.03]
+        backdrop-blur-xl
+        transition-all
+        duration-500
+        hover:border-cyan-400/20
+        hover:shadow-[0_0_40px_rgba(56,189,248,0.08)]
+      "
     >
-      <div className="flex flex-col gap-6">
+      {/* Decorative Glow */}
+      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+
+      <div className="relative flex h-full flex-col gap-7">
         {/* ---------------------------------------------------------------------
             Header
         ---------------------------------------------------------------------- */}
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-500 to-violet-600 text-white shadow-lg shadow-cyan-500/20">
-            <User className="h-5 w-5" />
+        <div className="flex items-start gap-4">
+          <div
+            className="
+              flex
+              h-14
+              w-14
+              shrink-0
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              border-cyan-400/20
+              bg-gradient-to-br
+              from-cyan-500
+              via-blue-500
+              to-violet-600
+              text-white
+              shadow-lg
+              shadow-cyan-500/20
+            "
+          >
+            <User className="h-6 w-6" />
           </div>
 
-          <div>
+          <div className="min-w-0 flex-1">
             <h2 className="text-2xl font-bold tracking-tight text-white">
               About Me
             </h2>
 
-            <div className="mt-2 h-1 w-14 rounded-full bg-gradient-to-r from-cyan-500 to-violet-500" />
+            <div className="mt-3 h-[3px] w-16 rounded-full bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500" />
           </div>
         </div>
 
         {/* ---------------------------------------------------------------------
             Description
         ---------------------------------------------------------------------- */}
-        <p className="text-sm leading-7 text-zinc-300">
+        <p
+          className="
+            text-[15px]
+            leading-8
+            text-zinc-300
+          "
+        >
           Aspiring Software Engineer with experience in developing full-stack
           applications, backend systems, and modern web solutions. Driven by
           curiosity and a strong problem-solving mindset, with a passion for
@@ -71,19 +112,55 @@ export default function AboutCard() {
         {/* ---------------------------------------------------------------------
             Quick Information
         ---------------------------------------------------------------------- */}
-        <div className="grid gap-3">
-          <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-            <MapPin className="h-4 w-4 shrink-0 text-cyan-400" />
+        <div className="grid gap-4">
+          <div
+            className="
+              flex
+              items-center
+              gap-3
+              rounded-2xl
+              border
+              border-white/10
+              bg-white/5
+              px-4
+              py-3.5
+              transition-all
+              duration-300
+              hover:border-cyan-400/20
+              hover:bg-white/10
+            "
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10">
+              <MapPin className="h-4 w-4 text-cyan-400" />
+            </div>
 
-            <span className="text-sm text-zinc-200">
+            <span className="text-sm font-medium text-zinc-200">
               Panchkula, Haryana, India
             </span>
           </div>
 
-          <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-            <Mail className="h-4 w-4 shrink-0 text-cyan-400" />
+          <div
+            className="
+              flex
+              items-center
+              gap-3
+              rounded-2xl
+              border
+              border-white/10
+              bg-white/5
+              px-4
+              py-3.5
+              transition-all
+              duration-300
+              hover:border-cyan-400/20
+              hover:bg-white/10
+            "
+          >
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10">
+              <Mail className="h-4 w-4 text-cyan-400" />
+            </div>
 
-            <span className="truncate text-sm text-zinc-200">
+            <span className="truncate text-sm font-medium text-zinc-200">
               ashu11vats@gmail.com
             </span>
           </div>
@@ -92,11 +169,22 @@ export default function AboutCard() {
         {/* ---------------------------------------------------------------------
             Social Links
         ---------------------------------------------------------------------- */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 pt-1">
           <Button
             asChild
             variant="secondary"
-            className="w-full justify-center"
+            className="
+              h-11
+              w-full
+              justify-center
+              rounded-xl
+              border
+              border-white/10
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:border-cyan-400/30
+            "
             leftIcon={<FaLinkedinIn className="h-4 w-4" />}
           >
             <Link
@@ -111,7 +199,18 @@ export default function AboutCard() {
           <Button
             asChild
             variant="secondary"
-            className="w-full justify-center"
+            className="
+              h-11
+              w-full
+              justify-center
+              rounded-xl
+              border
+              border-white/10
+              transition-all
+              duration-300
+              hover:-translate-y-0.5
+              hover:border-cyan-400/30
+            "
             leftIcon={<FaGithub className="h-4 w-4" />}
           >
             <Link

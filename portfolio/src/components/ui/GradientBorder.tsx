@@ -5,19 +5,18 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/GradientBorder.tsx
 
-   Production-ready reusable Gradient Border wrapper.
+   Ultra Premium reusable Gradient Border wrapper.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ Slot + Slottable support
-   ✓ asChild support
-   ✓ Gradient variants
-   ✓ Glow effect
-   ✓ Radius variants
-   ✓ Border thickness
+   ✓ Slot + Slottable
+   ✓ Animated Gradient
+   ✓ Glassmorphism
+   ✓ Glow Effect
+   ✓ Premium Hover
    ✓ ForwardRef
 ============================================================================= */
 
@@ -28,33 +27,61 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const gradientBorderVariants = cva(
-  "relative overflow-hidden transition-all duration-300",
+  [
+    "group",
+    "relative",
+    "overflow-hidden",
+
+    "transition-all",
+    "duration-500",
+    "ease-out",
+
+    "isolate",
+
+    "bg-[length:250%_250%]",
+  ].join(" "),
   {
     variants: {
       variant: {
-        primary:
-          "bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-500",
+        primary: [
+          "bg-gradient-to-r",
+          "from-cyan-500",
+          "via-blue-500",
+          "to-violet-500",
+        ].join(" "),
 
-        accent:
-          "bg-gradient-to-r from-violet-500 via-fuchsia-500 to-pink-500",
+        accent: [
+          "bg-gradient-to-r",
+          "from-violet-500",
+          "via-fuchsia-500",
+          "to-pink-500",
+        ].join(" "),
 
-        success:
-          "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500",
+        success: [
+          "bg-gradient-to-r",
+          "from-emerald-500",
+          "via-teal-500",
+          "to-cyan-500",
+        ].join(" "),
 
-        warning:
-          "bg-gradient-to-r from-amber-400 via-orange-500 to-red-500",
+        warning: [
+          "bg-gradient-to-r",
+          "from-amber-400",
+          "via-orange-500",
+          "to-red-500",
+        ].join(" "),
       },
 
       radius: {
         none: "rounded-none",
 
-        sm: "rounded-lg",
+        sm: "rounded-xl",
 
-        md: "rounded-xl",
+        md: "rounded-2xl",
 
-        lg: "rounded-2xl",
+        lg: "rounded-3xl",
 
-        xl: "rounded-3xl",
+        xl: "rounded-[2rem]",
 
         full: "rounded-full",
       },
@@ -79,25 +106,25 @@ const gradientBorderVariants = cva(
         glow: true,
         variant: "primary",
         className:
-          "shadow-[0_0_40px_rgba(6,182,212,0.30)]",
+          "shadow-[0_20px_60px_rgba(59,130,246,.30)]",
       },
       {
         glow: true,
         variant: "accent",
         className:
-          "shadow-[0_0_40px_rgba(139,92,246,0.30)]",
+          "shadow-[0_20px_60px_rgba(168,85,247,.30)]",
       },
       {
         glow: true,
         variant: "success",
         className:
-          "shadow-[0_0_35px_rgba(16,185,129,0.30)]",
+          "shadow-[0_20px_60px_rgba(16,185,129,.30)]",
       },
       {
         glow: true,
         variant: "warning",
         className:
-          "shadow-[0_0_35px_rgba(245,158,11,0.30)]",
+          "shadow-[0_20px_60px_rgba(249,115,22,.30)]",
       },
     ],
 
@@ -115,6 +142,18 @@ export interface GradientBorderProps
     VariantProps<typeof gradientBorderVariants> {
   asChild?: boolean;
 }
+
+const innerRadius: Record<
+  NonNullable<GradientBorderProps["radius"]>,
+  string
+> = {
+  none: "rounded-none",
+  sm: "rounded-[calc(theme(borderRadius.xl)-1px)]",
+  md: "rounded-[calc(theme(borderRadius.2xl)-2px)]",
+  lg: "rounded-[calc(theme(borderRadius.3xl)-2px)]",
+  xl: "rounded-[calc(2rem-2px)]",
+  full: "rounded-full",
+};
 
 const GradientBorder = React.forwardRef<
   HTMLDivElement,
@@ -149,19 +188,81 @@ const GradientBorder = React.forwardRef<
         )}
         {...props}
       >
+        {/* Animated Border Glow */}
+        <div
+          aria-hidden
+          className="
+            absolute
+            inset-0
+            opacity-0
+            blur-2xl
+            transition-opacity
+            duration-500
+            group-hover:opacity-100
+            bg-inherit
+          "
+        />
+
+        {/* Inner Glass Surface */}
         <div
           className={cn(
-            "h-full w-full bg-slate-950",
-            {
-              "rounded-lg": radius === "sm",
-              "rounded-xl": radius === "md",
-              "rounded-2xl": radius === "lg",
-              "rounded-3xl": radius === "xl",
-              "rounded-full": radius === "full",
-            }
+            "relative",
+
+            "h-full",
+            "w-full",
+
+            "overflow-hidden",
+
+            "border",
+
+            "border-white/8",
+
+            "bg-slate-950/90",
+
+            "backdrop-blur-3xl",
+
+            "shadow-[inset_0_1px_0_rgba(255,255,255,.05)]",
+
+            innerRadius[radius ?? "lg"]
           )}
         >
-          <Slottable>{children}</Slottable>
+          {/* Glass Highlight */}
+          <div
+            aria-hidden
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              bg-gradient-to-br
+              from-white/[0.06]
+              via-transparent
+              to-white/[0.02]
+            "
+          />
+
+          {/* Hover Glow */}
+          <div
+            aria-hidden
+            className="
+              pointer-events-none
+              absolute
+              -right-16
+              -top-16
+              h-40
+              w-40
+              rounded-full
+              bg-white/10
+              blur-3xl
+              opacity-0
+              transition-opacity
+              duration-500
+              group-hover:opacity-100
+            "
+          />
+
+          <div className="relative z-10 h-full w-full">
+            <Slottable>{children}</Slottable>
+          </div>
         </div>
       </Comp>
     );

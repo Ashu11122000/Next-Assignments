@@ -5,7 +5,7 @@
    -----------------------------------------------------------------------------
    File: src/components/common/ScrollIndicator.tsx
 
-   Production-ready reusable Scroll Indicator.
+   Ultra Premium Scroll Indicator.
 
    Features
    -----------------------------------------------------------------------------
@@ -13,10 +13,9 @@
    ✓ Next.js 16
    ✓ TypeScript
    ✓ Framer Motion
+   ✓ Glassmorphism
+   ✓ Premium Animation
    ✓ Accessible
-   ✓ Smooth scrolling
-   ✓ Configurable target section
-   ✓ Optional label
 ============================================================================= */
 
 import * as React from "react";
@@ -27,18 +26,37 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const scrollIndicatorVariants = cva(
-  "inline-flex flex-col items-center justify-center gap-3 transition-all duration-300",
+  [
+    "inline-flex",
+    "flex-col",
+    "items-center",
+    "justify-center",
+
+    "gap-4",
+
+    "transition-all",
+
+    "duration-300",
+
+    "ease-out",
+
+    "group",
+  ].join(" "),
   {
     variants: {
       size: {
         sm: "scale-90",
+
         md: "scale-100",
+
         lg: "scale-110",
       },
 
       variant: {
         default: "text-slate-400",
-        primary: "text-cyan-400",
+
+        primary: "text-cyan-300",
+
         white: "text-white",
       },
     },
@@ -53,19 +71,10 @@ const scrollIndicatorVariants = cva(
 export interface ScrollIndicatorProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof scrollIndicatorVariants> {
-  /**
-   * ID of the section to scroll to.
-   */
   targetId?: string;
 
-  /**
-   * Accessible label.
-   */
   label?: string;
 
-  /**
-   * Show text label below the indicator.
-   */
   showLabel?: boolean;
 }
 
@@ -79,7 +88,9 @@ export function ScrollIndicator({
   onClick,
   ...props
 }: ScrollIndicatorProps) {
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     onClick?.(event);
 
     if (event.defaultPrevented) return;
@@ -108,48 +119,142 @@ export function ScrollIndicator({
       )}
       {...props}
     >
+      {/* Mouse */}
+
       <motion.div
-        animate={{
-          y: [0, 8, 0],
+        whileHover={{
+          scale: 1.05,
         }}
-        transition={{
-          duration: 1.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="flex h-14 w-8 items-start justify-center rounded-full border border-current p-1"
+        className="
+          relative
+
+          flex
+
+          h-16
+          w-9
+
+          items-start
+          justify-center
+
+          overflow-hidden
+
+          rounded-full
+
+          border
+
+          border-white/15
+
+          bg-white/[0.04]
+
+          backdrop-blur-xl
+
+          shadow-[0_10px_35px_rgba(15,23,42,.20)]
+        "
       >
+        {/* Top highlight */}
+
+        <div
+          className="
+            absolute
+
+            inset-x-2
+
+            top-0
+
+            h-px
+
+            bg-gradient-to-r
+
+            from-transparent
+
+            via-white/30
+
+            to-transparent
+          "
+        />
+
+        {/* Animated Dot */}
+
         <motion.div
           animate={{
-            y: [0, 18, 0],
+            y: [0, 22, 0],
+
+            opacity: [1, 0.4, 1],
           }}
           transition={{
-            duration: 1.5,
+            duration: 2,
+
             repeat: Infinity,
+
             ease: "easeInOut",
           }}
-          className="h-2 w-2 rounded-full bg-current"
+          className="
+            mt-2
+
+            h-2.5
+            w-2.5
+
+            rounded-full
+
+            bg-cyan-300
+
+            shadow-[0_0_15px_rgba(34,211,238,.6)]
+          "
         />
       </motion.div>
+
+      {/* Arrow */}
 
       <motion.div
         animate={{
           y: [0, 6, 0],
         }}
         transition={{
-          duration: 1.5,
+          duration: 2,
+
           repeat: Infinity,
+
           ease: "easeInOut",
-          delay: 0.2,
+
+          delay: 0.15,
         }}
       >
-        <ChevronDown className="h-5 w-5" />
+        <ChevronDown
+          className="
+            h-5
+            w-5
+
+            transition-transform
+
+            duration-300
+
+            group-hover:translate-y-1
+          "
+        />
       </motion.div>
 
       {showLabel && (
-        <span className="text-xs font-medium uppercase tracking-[0.2em]">
+        <motion.span
+          initial={{
+            opacity: 0.8,
+          }}
+          whileHover={{
+            opacity: 1,
+          }}
+          className="
+            text-[11px]
+
+            font-semibold
+
+            uppercase
+
+            tracking-[0.28em]
+
+            text-slate-400
+          "
+        >
           {label}
-        </span>
+        </motion.span>
       )}
     </button>
   );

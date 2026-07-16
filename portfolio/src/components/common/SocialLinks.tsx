@@ -4,35 +4,21 @@
    Portfolio Website
    =============================================================================
    File: src/components/common/SocialLinks.tsx
-   -----------------------------------------------------------------------------
-   Reusable Social Links
-   -----------------------------------------------------------------------------
 
-   Responsibilities
-   ----------------
-   • Render reusable social profile links.
-   • Support icon-only and labeled layouts.
-   • Reuse the shared Button component.
-   • Provide accessible external links.
-   • Remain responsive and configurable.
+   Ultra Premium Social Links
 
    Features
-   --------
+   -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ CVA Variants
-   ✓ Accessible
    ✓ Responsive
-   ✓ react-icons (Brand Icons)
-   ✓ Lucide React (UI Icons)
-   ✓ Production Ready
-
+   ✓ Accessible
+   ✓ Premium Glass UI
 ============================================================================= */
 
 import * as React from "react";
 import Link from "next/link";
-
 import { cva, type VariantProps } from "class-variance-authority";
 import { Mail } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
@@ -44,32 +30,43 @@ import { cn } from "@/lib/utils";
    Variants
 ============================================================================= */
 
-const socialLinksVariants = cva("flex", {
-  variants: {
-    direction: {
-      row: "flex-row",
-      column: "flex-col",
+const socialLinksVariants = cva(
+  [
+    "flex",
+    "flex-wrap",
+  ].join(" "),
+  {
+    variants: {
+      direction: {
+        row: "flex-row",
+
+        column: "flex-col",
+      },
+
+      gap: {
+        sm: "gap-2",
+
+        md: "gap-3",
+
+        lg: "gap-4",
+      },
+
+      alignment: {
+        start: "items-start justify-start",
+
+        center: "items-center justify-center",
+
+        end: "items-end justify-end",
+      },
     },
 
-    gap: {
-      sm: "gap-2",
-      md: "gap-3",
-      lg: "gap-4",
+    defaultVariants: {
+      direction: "row",
+      gap: "md",
+      alignment: "center",
     },
-
-    alignment: {
-      start: "items-start justify-start",
-      center: "items-center justify-center",
-      end: "items-end justify-end",
-    },
-  },
-
-  defaultVariants: {
-    direction: "row",
-    gap: "md",
-    alignment: "center",
-  },
-});
+  }
+);
 
 /* =============================================================================
    Types
@@ -84,22 +81,10 @@ export interface SocialLink {
 export interface SocialLinksProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof socialLinksVariants> {
-  /**
-   * Override default links.
-   */
   links?: readonly SocialLink[];
 
-  /**
-   * Show text labels beside icons.
-   *
-   * true  → GitHub
-   * false → icon only
-   */
   showLabel?: boolean;
 
-  /**
-   * Button variant.
-   */
   buttonVariant?: React.ComponentProps<typeof Button>["variant"];
 }
 
@@ -136,7 +121,7 @@ export default function SocialLinks({
   alignment,
   links = DEFAULT_LINKS,
   showLabel = false,
-  buttonVariant = "ghost",
+  buttonVariant = "glass",
   ...props
 }: SocialLinksProps) {
   return (
@@ -159,17 +144,73 @@ export default function SocialLinks({
           size={showLabel ? "md" : "icon"}
           aria-label={link.label}
           title={link.label}
+          className={cn(
+            "group",
+
+            showLabel
+              ? [
+                  "min-w-[140px]",
+                  "justify-center",
+                  "rounded-2xl",
+                ].join(" ")
+              : [
+                  "h-12",
+                  "w-12",
+                  "rounded-2xl",
+                ].join(" "),
+
+            "border",
+
+            "border-white/10",
+
+            "bg-white/[0.04]",
+
+            "backdrop-blur-2xl",
+
+            "shadow-[0_12px_35px_rgba(15,23,42,.22)]",
+
+            "hover:border-cyan-400/30",
+
+            "hover:shadow-[0_18px_45px_rgba(59,130,246,.22)]"
+          )}
         >
           <Link
             href={link.href}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={link.label}
+            className={cn(
+              "flex",
+              "items-center",
+              "justify-center",
+
+              showLabel && "gap-2.5"
+            )}
           >
-            {link.icon}
+            <span
+              className="
+                flex
+                items-center
+                justify-center
+
+                transition-transform
+                duration-300
+
+                group-hover:-translate-y-0.5
+                group-hover:scale-110
+              "
+            >
+              {link.icon}
+            </span>
 
             {showLabel && (
-              <span className="ml-2">
+              <span
+                className="
+                  text-sm
+                  font-medium
+                  tracking-wide
+                "
+              >
                 {link.label}
               </span>
             )}

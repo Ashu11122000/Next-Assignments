@@ -5,21 +5,18 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/Container.tsx
 
-   Production-ready reusable Container component.
+   Ultra Premium reusable Container component.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ Slot + Slottable support
-   ✓ asChild support
-   ✓ CVA variants
-   ✓ Responsive max-widths
-   ✓ Horizontal padding
-   ✓ Center alignment
-   ✓ ForwardRef
-   ✓ Accessible
+   ✓ Slot + Slottable
+   ✓ CVA
+   ✓ Premium Responsive Layout
+   ✓ Better Desktop Width
+   ✓ Better Mobile Spacing
 ============================================================================= */
 
 import * as React from "react";
@@ -30,35 +27,64 @@ import { cn } from "@/lib/utils";
 
 const containerVariants = cva(
   [
+    "relative",
     "mx-auto",
     "w-full",
+
     "transition-all",
     "duration-300",
+    "ease-out",
   ].join(" "),
   {
     variants: {
       size: {
         xs: "max-w-screen-xs",
+
         sm: "max-w-screen-sm",
+
         md: "max-w-screen-md",
+
         lg: "max-w-screen-lg",
+
         xl: "max-w-screen-xl",
-        "2xl": "max-w-screen-2xl",
+
+        "2xl": "max-w-[1440px]",
+
         full: "max-w-full",
       },
 
       padding: {
         none: "",
 
-        sm: "px-4 sm:px-6",
+        sm: [
+          "px-4",
+          "sm:px-6",
+          "lg:px-8",
+        ].join(" "),
 
-        md: "px-6 sm:px-8 lg:px-10",
+        md: [
+          "px-5",
+          "sm:px-8",
+          "lg:px-10",
+          "xl:px-12",
+        ].join(" "),
 
-        lg: "px-6 md:px-10 lg:px-12 xl:px-16",
+        lg: [
+          "px-6",
+          "sm:px-8",
+          "md:px-10",
+          "lg:px-14",
+          "xl:px-20",
+        ].join(" "),
       },
 
       centered: {
-        true: "text-center",
+        true: [
+          "text-center",
+          "flex",
+          "flex-col",
+          "items-center",
+        ].join(" "),
 
         false: "",
       },
@@ -66,7 +92,7 @@ const containerVariants = cva(
 
     defaultVariants: {
       size: "2xl",
-      padding: "md",
+      padding: "lg",
       centered: false,
     },
   }

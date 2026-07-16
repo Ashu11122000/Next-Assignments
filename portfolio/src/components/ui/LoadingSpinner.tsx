@@ -5,19 +5,18 @@
    -----------------------------------------------------------------------------
    File: src/components/ui/LoadingSpinner.tsx
 
-   Production-ready reusable loading spinner.
+   Ultra Premium reusable Loading Spinner.
 
    Features
    -----------------------------------------------------------------------------
    ✓ React 19
    ✓ Next.js 16
    ✓ TypeScript
-   ✓ CVA Variants
-   ✓ Multiple sizes
-   ✓ Multiple colors
+   ✓ CVA
+   ✓ Glassmorphism
+   ✓ Premium Overlay
+   ✓ Loading Text
    ✓ Accessible
-   ✓ Optional loading text
-   ✓ ForwardRef
 ============================================================================= */
 
 import * as React from "react";
@@ -31,25 +30,38 @@ const spinnerVariants = cva(
     "inline-flex",
     "items-center",
     "justify-center",
-    "gap-3",
+    "gap-4",
+
+    "transition-all",
+    "duration-300",
   ].join(" "),
   {
     variants: {
       size: {
         xs: "text-xs",
+
         sm: "text-sm",
+
         md: "text-base",
+
         lg: "text-lg",
+
         xl: "text-xl",
       },
 
       color: {
         default: "text-slate-300",
+
         primary: "text-cyan-400",
+
         secondary: "text-blue-400",
+
         success: "text-emerald-400",
+
         warning: "text-amber-400",
+
         danger: "text-red-400",
+
         white: "text-white",
       },
     },
@@ -62,15 +74,18 @@ const spinnerVariants = cva(
 );
 
 const iconSizes = {
-  xs: 14,
-  sm: 18,
-  md: 22,
-  lg: 28,
-  xl: 36,
+  xs: 16,
+  sm: 20,
+  md: 26,
+  lg: 34,
+  xl: 42,
 } as const;
 
 export interface LoadingSpinnerProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "color">,
+  extends Omit<
+      React.HTMLAttributes<HTMLDivElement>,
+      "color"
+    >,
     VariantProps<typeof spinnerVariants> {
   text?: string;
 
@@ -93,6 +108,7 @@ const LoadingSpinner = React.forwardRef<
     ref
   ) => {
     const spinSize = size as keyof typeof iconSizes;
+
     return (
       <div
         ref={ref}
@@ -101,29 +117,98 @@ const LoadingSpinner = React.forwardRef<
         aria-busy="true"
         className={cn(
           fullScreen &&
-            "fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md",
+            [
+              "fixed",
+              "inset-0",
+              "z-[999]",
+
+              "flex",
+              "items-center",
+              "justify-center",
+
+              "bg-slate-950/70",
+
+              "backdrop-blur-xl",
+            ].join(" "),
+
           spinnerVariants({
-            size,          
+            size,
             color,
           }),
+
           className
         )}
         {...props}
       >
-        <Loader2
-          className="animate-spin shrink-0"
-          size={iconSizes[spinSize]}
-        />
+        <div
+          className="
+            flex
+            items-center
+            gap-4
 
-        {text && (
-          <span className="font-medium">
-            {text}
+            rounded-2xl
+
+            border
+            border-white/10
+
+            bg-white/[0.05]
+
+            px-6
+            py-4
+
+            backdrop-blur-2xl
+
+            shadow-[0_20px_60px_rgba(15,23,42,.35)]
+          "
+        >
+          {/* Spinner */}
+          <div className="relative flex items-center justify-center">
+            {/* Glow */}
+            <div
+              className="
+                absolute
+                inset-0
+
+                rounded-full
+
+                bg-cyan-400/20
+
+                blur-xl
+              "
+            />
+
+            <Loader2
+              className="
+                relative
+
+                shrink-0
+
+                animate-spin
+
+                text-cyan-400
+              "
+              size={iconSizes[spinSize]}
+            />
+          </div>
+
+          {text && (
+            <span
+              className="
+                font-medium
+
+                tracking-wide
+
+                text-slate-200
+              "
+            >
+              {text}
+            </span>
+          )}
+
+          <span className="sr-only">
+            Loading
           </span>
-        )}
-
-        <span className="sr-only">
-          Loading
-        </span>
+        </div>
       </div>
     );
   }
