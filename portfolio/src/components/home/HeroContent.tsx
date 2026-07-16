@@ -27,7 +27,7 @@ import Link from "next/link";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { SocialLinks } from "@/components/common/SocialLinks";
+import SocialLinks from "@/components/common/SocialLinks";
 
 import {
   HERO_BUTTONS,
