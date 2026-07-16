@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * =============================================================================
  * Portfolio
@@ -12,7 +14,7 @@
  * • Display when a route cannot be found.
  * • Provide navigation back to the homepage.
  * • Match the portfolio's premium design language.
- * • Remain lightweight and server-rendered.
+ * • Lightweight Client Component (required for Go Back button).
  *
  * =============================================================================
  */
@@ -22,6 +24,10 @@ import Link from "next/link";
 import { ArrowLeft, Home, SearchX } from "lucide-react";
 
 export default function NotFound() {
+  const handleGoBack = () => {
+    window.history.back();
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-background px-6">
       <section className="glass relative w-full max-w-2xl overflow-hidden rounded-3xl border border-border p-10 shadow-card">
@@ -48,7 +54,7 @@ export default function NotFound() {
 
         {/* Description */}
         <p className="body-md mx-auto mt-6 max-w-xl text-center text-muted">
-          The page you're looking for doesn't exist, may have been moved,
+          The page you&apos;re looking for doesn&apos;t exist, may have been moved,
           or the URL might be incorrect.
         </p>
 
@@ -64,7 +70,7 @@ export default function NotFound() {
 
           <button
             type="button"
-            onClick={() => window.history.back()}
+            onClick={handleGoBack}
             className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-6 py-3 font-medium text-foreground transition-all duration-300 hover:bg-card-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
           >
             <ArrowLeft className="h-5 w-5" />

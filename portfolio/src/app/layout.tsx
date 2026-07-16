@@ -15,11 +15,12 @@
  * • Register application providers
  * • Configure HTML language
  * • Prevent hydration mismatch
- * • Define the root document structure
+ * • Render shared layout components
  *
  * =============================================================================
  */
 
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { Geist, Geist_Mono } from "next/font/google";
@@ -28,8 +29,15 @@ import "@/app/globals.css";
 
 import Providers from "./providers";
 
-import { metadata } from "@/lib/metadata";
+import { metadata as siteMetadata } from "@/lib/metadata";
 import { cn } from "@/lib/utils";
+
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import PageContainer from "@/components/layout/PageContainer";
+
+import ScrollProgress from "@/components/common/ScrollProgress";
+import BackToTop from "@/components/common/BackToTop";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +51,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export { metadata };
+export const metadata: Metadata = siteMetadata;
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -65,7 +73,19 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans text-foreground antialiased"
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <ScrollProgress />
+
+          <Navbar />
+
+          <main className="flex min-h-screen flex-col">
+            <PageContainer>{children}</PageContainer>
+          </main>
+
+          <Footer />
+
+          <BackToTop />
+        </Providers>
       </body>
     </html>
   );
